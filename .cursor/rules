@@ -1,0 +1,278 @@
+# Jewelry Store - Cursor AI Rules
+
+## Project Overview
+
+This is a Next.js 15-based online jewelry store with Supabase backend, featuring a complete e-commerce solution with admin panel, user authentication, shopping cart, and order management.
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 (App Router), TypeScript, React
+- **UI Library**: shadcn/ui components, TailwindCSS
+- **Backend**: Supabase (PostgreSQL, Auth, Storage)
+- **State Management**: React Context (AuthContext, CartContext)
+- **Form Handling**: React Hook Form with Zod validation
+- **Notifications**: Sonner (toast notifications)
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── (auth)/            # Authentication pages
+│   ├── admin/             # Admin panel pages
+│   ├── products/          # Product pages
+│   ├── women/             # Women's jewelry categories
+│   ├── men/               # Men's jewelry categories
+│   ├── couple/            # Couple's jewelry categories
+│   ├── gems/              # Gems & materials categories
+│   ├── personalized/      # Personalized jewelry categories
+│   ├── gifting/           # Gifting categories
+│   ├── our-world/         # Company information pages
+│   ├── cart/              # Shopping cart
+│   ├── checkout/          # Checkout process
+│   └── layout.tsx         # Root layout
+├── components/            # Reusable components
+│   ├── ui/               # shadcn/ui components
+│   ├── admin/            # Admin-specific components
+│   ├── Header.tsx        # Main navigation header
+│   ├── Footer.tsx        # Site footer
+│   ├── ProductCard.tsx   # Product display component
+│   ├── CategoryPage.tsx  # Reusable category page component
+│   └── HeroCarousel.tsx  # Homepage carousel
+├── contexts/             # React Context providers
+│   ├── AuthContext.tsx   # Authentication state
+│   └── CartContext.tsx   # Shopping cart state
+├── lib/                  # Utility libraries
+│   ├── supabase.ts       # Supabase client configuration
+│   ├── supabase-client.ts # Browser client
+│   ├── supabase-server.ts # Server client
+│   └── category-utils.ts # Category mapping utilities
+├── types/                # TypeScript type definitions
+│   └── index.ts          # All type definitions
+├── data/                 # Static data files
+│   ├── navigation.ts     # Navigation structure
+│   └── categories.ts     # Category definitions
+```
+
+## Type System
+
+### Category Types:
+
+- **MainCategorySlug**: `'women' | 'men' | 'couple' | 'gems' | 'personalized' | 'gifting' | 'our-world'`
+- **WomenCategorySlug**: All women's subcategories (necklaces, earrings, rings, etc.)
+- **MenCategorySlug**: `'wallets' | 'chains' | 'cufflinks' | 'lapel-pins'` (matches actual DB)
+- **CoupleCategorySlug**: `'matching-sets' | 'his-hers' | 'wedding-bands'`
+- **GemsCategorySlug**: `'diamonds' | 'gold' | 'silver' | 'pearls' | 'gemstones'`
+- **PersonalizedCategorySlug**: `'engraved' | 'custom' | 'birthstone'`
+- **GiftingCategorySlug**: `'gift-cards' | 'gift-sets' | 'special-occasions'`
+- **OurWorldCategorySlug**: `'about' | 'sustainability' | 'careers' | 'contact'`
+
+### Category Utilities (`src/lib/category-utils.ts`):
+
+- **DB_CATEGORY_MAPPING**: Maps category slugs to actual database IDs
+- **CATEGORY_HIERARCHY**: Defines parent-child relationships
+- **getCategoryIdBySlug()**: Get database ID from category slug
+- **getSubcategoriesByParent()**: Get all subcategories for a main category
+- **isValidCategorySlug()**: Validate category slugs
+
+### Database Integration:
+
+- All category queries now use actual database IDs instead of slugs
+- Type-safe category operations throughout the application
+- No more `any` types in product data with categories
+
+## Database Schema
+
+### Tables:
+
+- **categories**: Hierarchical category structure (parent-child relationships)
+- **products**: Product catalog with category relationships
+- **users**: User profiles extending Supabase auth.users
+- **orders**: Order information and shipping details
+- **order_items**: Individual items within orders
+
+### Key Relationships:
+
+- Categories have parent-child relationships for subcategories
+- Products belong to categories via category_id
+- Orders belong to users and contain multiple order_items
+- Users extend Supabase auth.users with role-based access
+
+## Authentication & Authorization
+
+- **User Authentication**: Supabase Auth with email/password
+- **Admin Access**: Environment variable-based credentials (NEXT_PUBLIC_ADMIN_EMAIL, NEXT_PUBLIC_ADMIN_PASSWORD)
+- **Role-based Access**: Customer vs Admin roles
+- **Row Level Security**: Supabase RLS policies for data access control
+
+## Key Features
+
+- **Dynamic Navigation**: Multi-level dropdown menus with subcategories
+- **Product Catalog**: Filterable, searchable product listings
+- **Shopping Cart**: Persistent cart with localStorage
+- **Checkout Flow**: Complete order processing with user details
+- **Admin Panel**: CRUD operations for products and categories
+- **Hero Carousel**: Interactive homepage carousel with navigation
+- **Responsive Design**: Mobile-first approach with TailwindCSS
+
+## Component Patterns
+
+- **Server Components**: Used for data fetching and SEO
+- **Client Components**: Used for interactivity and state management
+- **Reusable Components**: CategoryPage.tsx for consistent category layouts
+- **Form Components**: React Hook Form with Zod validation
+- **UI Components**: shadcn/ui for consistent design system
+
+## Environment Variables
+
+Required in `.env.local`:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_ADMIN_EMAIL=admin@yourstore.com
+NEXT_PUBLIC_ADMIN_PASSWORD=your_admin_password
+```
+
+## Development Guidelines
+
+- **TypeScript**: Strict typing throughout the application
+- **Error Handling**: Comprehensive error handling with user feedback
+- **Performance**: Optimized images with Next.js Image component
+- **Accessibility**: Semantic HTML and ARIA labels
+- **SEO**: Proper meta tags and structured data
+
+## File Naming Conventions
+
+- **Pages**: Use kebab-case for routes (e.g., `engagement-rings/page.tsx`)
+- **Components**: PascalCase (e.g., `ProductCard.tsx`)
+- **Utilities**: camelCase (e.g., `supabase-client.ts`)
+- **Types**: PascalCase interfaces (e.g., `Product`, `Category`)
+
+## Common Patterns
+
+- **Data Fetching**: Use `createClient()` from supabase-server.ts in server components
+- **State Management**: Use React Context for global state
+- **Form Handling**: Use React Hook Form with Zod schemas
+- **Error Boundaries**: Implement error handling for data fetching
+- **Loading States**: Use Suspense for loading states
+
+## Admin Panel Features
+
+- **Product Management**: Create, read, update, delete products
+- **Category Management**: Manage hierarchical categories
+- **Order Management**: View and manage customer orders
+- **User Management**: View customer information
+- **Statistics**: Dashboard with key metrics
+
+## Security Considerations
+
+- **RLS Policies**: Database-level access control
+- **Input Validation**: Zod schemas for form validation
+- **Environment Variables**: Secure credential storage
+- **CSRF Protection**: Built-in Next.js protection
+- **XSS Prevention**: React's built-in XSS protection
+
+## Performance Optimizations
+
+- **Image Optimization**: Next.js Image component with proper sizing
+- **Code Splitting**: Automatic with Next.js App Router
+- **Caching**: Supabase query caching
+- **Lazy Loading**: Suspense boundaries for components
+- **Bundle Optimization**: Tree shaking and dead code elimination
+
+## Testing Strategy
+
+- **Component Testing**: Test individual components
+- **Integration Testing**: Test user flows
+- **E2E Testing**: Test complete user journeys
+- **API Testing**: Test Supabase integrations
+
+## Deployment Considerations
+
+- **Environment Variables**: Set all required variables in production
+- **Database Migrations**: Run schema updates carefully
+- **Image Assets**: Optimize and compress images
+- **Performance Monitoring**: Monitor Core Web Vitals
+- **Error Tracking**: Implement error monitoring
+
+## Common Issues & Solutions
+
+- **Next.js 15 Warnings**: Use `await params` and `await cookies()` in server components
+- **Supabase RLS**: Ensure proper policies for data access
+- **Image Loading**: Configure `next.config.ts` for external image domains
+- **Form Validation**: Use Zod schemas for type-safe validation
+- **State Management**: Use Context for global state, local state for components
+
+## Future Enhancements
+
+- **Payment Integration**: Stripe or PayPal integration
+- **Inventory Management**: Stock tracking and alerts
+- **Wishlist Feature**: Save favorite products
+- **Reviews & Ratings**: Customer feedback system
+- **Multi-language Support**: Internationalization
+- **Advanced Search**: Elasticsearch integration
+- **Recommendation Engine**: AI-powered product recommendations
+
+## Code Style Guidelines
+
+- **ESLint**: Follow Next.js recommended ESLint configuration
+- **Prettier**: Consistent code formatting
+- **Import Organization**: Group imports logically
+- **Component Structure**: Consistent component organization
+- **Type Definitions**: Comprehensive TypeScript coverage
+
+## Documentation
+
+- **README.md**: Project setup and getting started guide
+- **SUPABASE_QUERIES.md**: Database query reference
+- **QUICK_QUERIES.md**: Common database operations
+- **ADMIN_SETUP.md**: Admin panel configuration guide
+- **EMAIL_TEMPLATES.md**: Email template documentation and setup guide
+- **EMAIL_TEMPLATES_RULES.md**: Email system rules and guidelines for AI
+- **.cursor/rules**: This file for AI context
+
+## Maintenance Notes
+
+- **Dependencies**: Keep dependencies updated
+- **Security**: Regular security audits
+- **Performance**: Monitor and optimize performance
+- **Database**: Regular backup and maintenance
+- **Code Quality**: Regular code reviews and refactoring
+
+## Implementation Status
+
+✅ **Completed Features:**
+
+- Next.js 15 setup with App Router
+- Supabase integration (database, auth, storage)
+- Complete UI component library (shadcn/ui)
+- User authentication system
+- Admin panel with CRUD operations
+- Shopping cart functionality
+- Checkout process with order creation
+- Product catalog with filtering
+- Dynamic navigation system
+- Hero carousel on homepage
+- All category and subcategory pages
+- Responsive design
+- TypeScript implementation
+- Error handling and validation
+- Environment configuration
+- Email template system (signup, password reset, order confirmation)
+- Order management system
+- Documentation and setup guides
+
+🔄 **In Progress:**
+
+- Payment integration (planned)
+- Advanced search features (planned)
+- Inventory management (planned)
+
+📋 **Future Roadmap:**
+
+- Multi-language support
+- Advanced analytics
+- Mobile app development
+- Third-party integrations
+- Performance optimizations

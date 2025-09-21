@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Luxe Jewelry</title>
+    <style>
+      body {
+        font-family: 'Georgia', serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fafafa;
+      }
+      .container {
+        background: white;
+        border-radius: 10px;
+        padding: 40px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        border-bottom: 2px solid #d4af37;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+      .logo {
+        font-size: 28px;
+        font-weight: bold;
+        color: #d4af37;
+        margin-bottom: 10px;
+      }
+      .tagline {
+        font-style: italic;
+        color: #666;
+        font-size: 14px;
+      }
+      .content {
+        margin-bottom: 30px;
+      }
+      .welcome-text {
+        font-size: 18px;
+        margin-bottom: 20px;
+        color: #2c3e50;
+      }
+      .cta-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #d4af37, #b8941f);
+        color: white;
+        padding: 15px 30px;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: bold;
+        text-align: center;
+        margin: 20px 0;
+        transition: transform 0.3s ease;
+      }
+      .cta-button:hover {
+        transform: translateY(-2px);
+      }
+      .features {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+      .features h3 {
+        color: #d4af37;
+        margin-bottom: 15px;
+      }
+      .features ul {
+        list-style: none;
+        padding: 0;
+      }
+      .features li {
+        padding: 5px 0;
+        position: relative;
+        padding-left: 25px;
+      }
+      .features li:before {
+        content: '💎';
+        position: absolute;
+        left: 0;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        color: #666;
+        font-size: 12px;
+      }
+      .social-links {
+        margin: 15px 0;
+      }
+      .social-links a {
+        color: #d4af37;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">💎 Luxe Jewelry</div>
+        <div class="tagline">Exquisite Jewelry for Every Moment</div>
+      </div>
+
+      <div class="content">
+        <h1 class="welcome-text">Welcome to Our Exclusive Collection!</h1>
+
+        <p>Dear {{ .Email }},</p>
+
+        <p>
+          Thank you for joining the Luxe Jewelry family! We're thrilled to have
+          you as part of our exclusive community of jewelry enthusiasts.
+        </p>
+
+        <p>
+          To complete your registration and start exploring our stunning
+          collection, please confirm your email address by clicking the button
+          below:
+        </p>
+
+        <div style="text-align: center">
+          <a href="{{ .ConfirmationURL }}" class="cta-button"
+            >Confirm Your Account</a
+          >
+        </div>
+
+        <div class="features">
+          <h3>What awaits you:</h3>
+          <ul>
+            <li>Exclusive access to our premium jewelry collections</li>
+            <li>Personalized recommendations based on your style</li>
+            <li>Early access to new arrivals and limited editions</li>
+            <li>Special member-only discounts and offers</li>
+            <li>Expert jewelry care tips and styling advice</li>
+          </ul>
+        </div>
+
+        <p>
+          If you have any questions or need assistance, our jewelry experts are
+          here to help. Simply reply to this email or contact us through our
+          website.
+        </p>
+
+        <p>Welcome to the world of luxury jewelry!</p>
+
+        <p>
+          Best regards,<br />
+          <strong>The Luxe Jewelry Team</strong>
+        </p>
+      </div>
+
+      <div class="footer">
+        <div class="social-links">
+          <a href="#">Instagram</a> | <a href="#">Facebook</a> |
+          <a href="#">Pinterest</a>
+        </div>
+        <p>
+          Luxe Jewelry Store<br />
+          123 Diamond Lane, Jewel City, JC 12345<br />
+          Phone: (555) 123-JEWEL | Email: hello@luxejewelry.com
+        </p>
+        <p>
+          If you didn't create an account with us, please ignore this email.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
