@@ -301,9 +301,9 @@ export default function AdminPage() {
                       >
                         <div className="flex items-center space-x-4">
                           <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
-                            {product.image_url ? (
+                            {product.images && product.images.length > 0 ? (
                               <img
-                                src={product.image_url}
+                                src={product.images[0]}
                                 alt={product.name}
                                 className="w-full h-full object-cover"
                               />

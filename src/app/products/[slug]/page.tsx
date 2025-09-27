@@ -117,7 +117,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="space-y-4">
           <div className="aspect-square relative overflow-hidden rounded-lg">
             <Image
-              src={product.image_url}
+              src={product.images[0]}
               alt={product.name}
               fill
               className="object-cover"
@@ -130,22 +130,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
           </div>
 
-          {/* Additional images would go here */}
-          <div className="grid grid-cols-4 gap-2">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="aspect-square relative overflow-hidden rounded cursor-pointer border-2 border-transparent hover:border-primary"
-              >
-                <Image
-                  src={product.image_url}
-                  alt={`${product.name} view ${i}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
+          {/* Additional images */}
+          {product.images.length > 1 && (
+            <div className="grid grid-cols-4 gap-2">
+              {product.images.slice(1, 5).map((image, i) => (
+                <div
+                  key={i}
+                  className="aspect-square relative overflow-hidden rounded cursor-pointer border-2 border-transparent hover:border-primary"
+                >
+                  <Image
+                    src={image}
+                    alt={`${product.name} view ${i + 2}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Product Details */}

@@ -40,7 +40,7 @@ export interface Database {
           description: string;
           price: number;
           category_id: string;
-          image_url: string;
+          images: string[];
           created_at: string;
         };
         Insert: {
@@ -50,7 +50,7 @@ export interface Database {
           description: string;
           price: number;
           category_id: string;
-          image_url: string;
+          images: string[];
           created_at?: string;
         };
         Update: {
@@ -60,7 +60,7 @@ export interface Database {
           description?: string;
           price?: number;
           category_id?: string;
-          image_url?: string;
+          images?: string[];
           created_at?: string;
         };
       };
