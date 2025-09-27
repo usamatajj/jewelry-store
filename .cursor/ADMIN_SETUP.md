@@ -117,6 +117,7 @@ The admin panel includes a comprehensive image upload system:
 
 #### Features
 
+- **Mandatory Image Upload**: At least one image is required for each product
 - **Multiple Image Support**: Upload up to 5 images per product
 - **Drag & Drop Interface**: Easy file selection with visual feedback
 - **Image Preview**: See images before upload with thumbnails
@@ -148,8 +149,8 @@ product-images/
 
 The `products` table includes:
 
-- `image_url`: Primary image URL (first image in array)
-- `images`: Array of all image URLs for the product
+- `images`: Array of image URLs for the product (required, must have at least one image)
+- The first image in the array is used as the primary product image
 
 ### Customization
 

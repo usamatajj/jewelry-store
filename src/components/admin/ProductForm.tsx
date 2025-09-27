@@ -51,7 +51,6 @@ export default function ProductForm({
     description: product?.description || '',
     price: product?.price?.toString() || '',
     category_id: product?.category_id || '',
-    image_url: product?.image_url || '',
   });
   const [productImages, setProductImages] = useState<ImageFile[]>([]);
 
@@ -60,11 +59,19 @@ export default function ProductForm({
     setLoading(true);
 
     try {
+      // Validate that we have at least one image
+      const hasNewImages = productImages.length > 0;
+      const hasExistingImages = product?.images && product.images.length > 0;
+
+      if (!hasNewImages && !hasExistingImages) {
+        toast.error('Please upload at least one image for the product');
+        setLoading(false);
+        return;
+      }
+
       const supabase = await createClient();
       const slug = formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-      // Upload new images if any
-      let finalImageUrl = formData.image_url;
       let finalImages: string[] = [];
 
       if (productImages.length > 0) {
@@ -84,11 +91,9 @@ export default function ProductForm({
           // For new products, use only new images
           finalImages = newImageUrls;
         }
-        finalImageUrl = finalImages[0] || formData.image_url;
       } else if (product?.images && product.images.length > 0) {
         // If no new images uploaded but product has existing images, keep them
         finalImages = product.images;
-        finalImageUrl = product.images[0] || formData.image_url;
       }
 
       if (product) {
@@ -98,14 +103,9 @@ export default function ProductForm({
           description: formData.description,
           price: parseFloat(formData.price),
           category_id: formData.category_id,
-          image_url: finalImageUrl,
+          images: finalImages,
           slug,
         };
-
-        // Add images array if we have multiple images
-        if (finalImages.length > 0) {
-          updateData.images = finalImages;
-        }
 
         const { error } = await supabase
           .from('products')
@@ -121,14 +121,9 @@ export default function ProductForm({
           description: formData.description,
           price: parseFloat(formData.price),
           category_id: formData.category_id,
-          image_url: finalImageUrl,
+          images: finalImages,
           slug,
         };
-
-        // Add images array if we have multiple images
-        if (finalImages.length > 0) {
-          insertData.images = finalImages;
-        }
 
         const { data: newProduct, error } = await supabase
           .from('products')
@@ -138,17 +133,7 @@ export default function ProductForm({
 
         if (error) throw error;
 
-        // If we have uploaded images, update the product with the image URLs
-        if (productImages.length > 0 && newProduct) {
-          // Images were already uploaded above, just update the product
-          await supabase
-            .from('products')
-            .update({
-              image_url: finalImageUrl,
-              images: finalImages,
-            })
-            .eq('id', newProduct.id);
-        }
+        // Images were already included in the insertData above, no need for additional update
 
         toast.success('Product created successfully');
       }
@@ -267,20 +252,8 @@ export default function ProductForm({
               }
               maxImages={5}
             />
-          </div>
-
-          <div>
-            <Label htmlFor="image_url">Fallback Image URL (Optional)</Label>
-            <Input
-              id="image_url"
-              value={formData.image_url}
-              onChange={(e) =>
-                setFormData({ ...formData, image_url: e.target.value })
-              }
-              placeholder="https://example.com/image.jpg"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Use this as a fallback if no images are uploaded above
+            <p className="text-xs text-gray-500 mt-2">
+              * At least one image is required for the product
             </p>
           </div>
 

@@ -14,8 +14,7 @@ export interface Product {
   description: string;
   price: number;
   category_id: string;
-  image_url: string;
-  images?: string[]; // Array of image URLs for multiple images
+  images: string[]; // Array of image URLs for multiple images (required)
   created_at: string;
   category?: Category;
 }

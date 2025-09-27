@@ -47,7 +47,7 @@ export function ProductCard({
           <div className="flex">
             <div className="w-32 h-32 relative overflow-hidden flex-shrink-0">
               <Image
-                src={product.image_url}
+                src={product.images[0]}
                 alt={product.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -90,7 +90,7 @@ export function ProductCard({
       <Link href={`/products/${product.slug}`}>
         <div className="aspect-square relative overflow-hidden">
           <Image
-            src={product.image_url}
+            src={product.images[0]}
             alt={product.name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"

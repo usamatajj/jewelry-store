@@ -249,9 +249,9 @@ export default function ImageUpload({
 
       {/* Helper Text */}
       {images.length === 0 && existingImages.length === 0 && (
-        <p className="text-sm text-gray-500">
-          Upload at least one image for your product. The first image will be
-          used as the main product image.
+        <p className="text-sm text-red-500 font-medium">
+          ⚠️ At least one image is required for the product. The first image
+          will be used as the main product image.
         </p>
       )}
     </div>
