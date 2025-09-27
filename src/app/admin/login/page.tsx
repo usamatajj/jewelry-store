@@ -20,15 +20,12 @@ export default function AdminLoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('handleSubmit');
     setLoading(true);
 
     try {
       // Check admin credentials against environment variables
       const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
       const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
-      console.log('adminEmail', adminEmail);
-      console.log('adminPassword', adminPassword);
       if (!adminEmail || !adminPassword) {
         toast.error('Admin credentials not configured');
         return;

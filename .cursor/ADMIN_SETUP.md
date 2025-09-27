@@ -46,11 +46,14 @@ The admin panel provides full CRUD access to:
 
 #### Products Management
 
-- ✅ **Create** new products with name, description, price, category, and image
+- ✅ **Create** new products with name, description, price, category, and multiple images
 - ✅ **Read** all products with search and filtering
-- ✅ **Update** existing product details
+- ✅ **Update** existing product details and images
 - ✅ **Delete** products (with confirmation)
 - ✅ **View** product images and details
+- ✅ **Multiple Image Upload** with drag & drop functionality
+- ✅ **Image Preview** before upload
+- ✅ **Supabase Storage Integration** for secure image hosting
 
 #### Categories Management
 
@@ -85,6 +88,8 @@ The admin panel provides full CRUD access to:
 - **Authentication Required**: Must be signed in to access admin features
 - **Secure Redirects**: Non-admin users are redirected to the main store
 - **Confirmation Dialogs**: Delete operations require confirmation
+- **Row Level Security**: Database operations are secured with RLS policies
+- **Image Upload Security**: Files are validated and stored securely in Supabase Storage
 
 ### Quick Start
 
@@ -105,6 +110,46 @@ The admin panel provides full CRUD access to:
 **If the admin user doesn't have the right permissions:**
 
 - Update the user record in the `users` table: `UPDATE users SET role = 'admin' WHERE email = 'your-admin@email.com';`
+
+### Image Upload System
+
+The admin panel includes a comprehensive image upload system:
+
+#### Features
+
+- **Multiple Image Support**: Upload up to 5 images per product
+- **Drag & Drop Interface**: Easy file selection with visual feedback
+- **Image Preview**: See images before upload with thumbnails
+- **File Validation**: Automatic validation of file types and sizes (5MB limit)
+- **Supabase Storage**: Images stored securely in Supabase Storage
+- **Organized Storage**: Images organized in `products/{productId}/` folders
+- **Database Integration**: Image URLs automatically saved to `images` array column
+
+#### How It Works
+
+1. **Select Images**: Drag & drop or click to browse for image files
+2. **Preview**: Images show as thumbnails immediately (stored locally)
+3. **Upload**: Images upload to Supabase Storage only when form is submitted
+4. **Database Update**: Image URLs are saved to the product record
+5. **Display**: Images are accessible via public URLs for display
+
+#### Storage Structure
+
+```
+product-images/
+├── products/
+│   └── {product-id}/
+│       ├── image1.jpg
+│       ├── image2.png
+│       └── ...
+```
+
+#### Database Schema
+
+The `products` table includes:
+
+- `image_url`: Primary image URL (first image in array)
+- `images`: Array of all image URLs for the product
 
 ### Customization
 

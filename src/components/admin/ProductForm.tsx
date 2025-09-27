@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,6 +22,14 @@ import {
 import { Category, Product } from '@/types';
 import { createClient } from '@/lib/supabase-client';
 import { toast } from 'sonner';
+import ImageUpload from './ImageUpload';
+import { uploadProductImages, moveTempImagesToProduct } from '@/lib/storage';
+
+interface ImageFile {
+  file: File;
+  preview: string;
+  id: string;
+}
 
 interface ProductFormProps {
   product?: Product;
@@ -45,6 +53,7 @@ export default function ProductForm({
     category_id: product?.category_id || '',
     image_url: product?.image_url || '',
   });
+  const [productImages, setProductImages] = useState<ImageFile[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,34 +63,93 @@ export default function ProductForm({
       const supabase = await createClient();
       const slug = formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
+      // Upload new images if any
+      let finalImageUrl = formData.image_url;
+      let finalImages: string[] = [];
+
+      if (productImages.length > 0) {
+        // Upload the new files to Supabase Storage
+        const uploadResults = await uploadProductImages(
+          productImages.map((img) => img.file),
+          product?.id
+        );
+
+        const newImageUrls = uploadResults.map((result) => result.url);
+
+        if (product) {
+          // For existing products, combine existing images with new ones
+          const existingImages = product.images || [];
+          finalImages = [...existingImages, ...newImageUrls];
+        } else {
+          // For new products, use only new images
+          finalImages = newImageUrls;
+        }
+        finalImageUrl = finalImages[0] || formData.image_url;
+      } else if (product?.images && product.images.length > 0) {
+        // If no new images uploaded but product has existing images, keep them
+        finalImages = product.images;
+        finalImageUrl = product.images[0] || formData.image_url;
+      }
+
       if (product) {
         // Update existing product
+        const updateData: Record<string, unknown> = {
+          name: formData.name,
+          description: formData.description,
+          price: parseFloat(formData.price),
+          category_id: formData.category_id,
+          image_url: finalImageUrl,
+          slug,
+        };
+
+        // Add images array if we have multiple images
+        if (finalImages.length > 0) {
+          updateData.images = finalImages;
+        }
+
         const { error } = await supabase
           .from('products')
-          .update({
-            name: formData.name,
-            description: formData.description,
-            price: parseFloat(formData.price),
-            category_id: formData.category_id,
-            image_url: formData.image_url,
-            slug,
-          })
+          .update(updateData)
           .eq('id', product.id);
 
         if (error) throw error;
         toast.success('Product updated successfully');
       } else {
         // Create new product
-        const { error } = await supabase.from('products').insert({
+        const insertData: Record<string, unknown> = {
           name: formData.name,
           description: formData.description,
           price: parseFloat(formData.price),
           category_id: formData.category_id,
-          image_url: formData.image_url,
+          image_url: finalImageUrl,
           slug,
-        });
+        };
+
+        // Add images array if we have multiple images
+        if (finalImages.length > 0) {
+          insertData.images = finalImages;
+        }
+
+        const { data: newProduct, error } = await supabase
+          .from('products')
+          .insert(insertData)
+          .select()
+          .single();
 
         if (error) throw error;
+
+        // If we have uploaded images, update the product with the image URLs
+        if (productImages.length > 0 && newProduct) {
+          // Images were already uploaded above, just update the product
+          await supabase
+            .from('products')
+            .update({
+              image_url: finalImageUrl,
+              images: finalImages,
+            })
+            .eq('id', newProduct.id);
+        }
+
         toast.success('Product created successfully');
       }
 
@@ -125,13 +193,13 @@ export default function ProductForm({
       <DialogTrigger asChild>
         {trigger || <Button>{product ? 'Edit Product' : 'Add Product'}</Button>}
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {product ? 'Edit Product' : 'Add New Product'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div>
             <Label htmlFor="name">Product Name</Label>
             <Input
@@ -192,7 +260,17 @@ export default function ProductForm({
           </div>
 
           <div>
-            <Label htmlFor="image_url">Image URL</Label>
+            <ImageUpload
+              onImagesChange={setProductImages}
+              initialImages={
+                product?.images?.map((url) => ({ url, path: '' })) || []
+              }
+              maxImages={5}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="image_url">Fallback Image URL (Optional)</Label>
             <Input
               id="image_url"
               value={formData.image_url}
@@ -201,6 +279,9 @@ export default function ProductForm({
               }
               placeholder="https://example.com/image.jpg"
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Use this as a fallback if no images are uploaded above
+            </p>
           </div>
 
           <div className="flex justify-between">

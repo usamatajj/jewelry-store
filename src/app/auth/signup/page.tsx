@@ -57,11 +57,9 @@ export default function SignUpPage() {
         setError(error.message);
       } else if (authData.user && authData.session) {
         // User is immediately signed in (auto-confirm enabled)
-        console.log('User signed up and signed in immediately:', authData.user);
         router.push('/profile');
       } else {
         // User needs to confirm email
-        console.log('User signed up, needs email confirmation:', authData.user);
         setSuccess(true);
       }
     } catch (err) {
@@ -73,7 +71,6 @@ export default function SignUpPage() {
 
   // Redirect if already signed in
   if (user) {
-    console.log('User already signed in, redirecting to profile:', user);
     router.push('/profile');
     return null;
   }
