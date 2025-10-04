@@ -222,7 +222,7 @@ export default function ProductForm({
           </div>
 
           <div>
-            <Label htmlFor="price">Price ($)</Label>
+            <Label htmlFor="price">Price (Rs)</Label>
             <Input
               id="price"
               type="number"

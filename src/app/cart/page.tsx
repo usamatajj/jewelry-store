@@ -22,10 +22,7 @@ export default function CartPage() {
   const { state, updateQuantity, removeItem, clearCart } = useCart();
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
+    return `Rs ${price.toLocaleString('en-PK')}`;
   };
 
   if (state.items.length === 0) {

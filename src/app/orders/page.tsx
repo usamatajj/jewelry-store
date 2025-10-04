@@ -50,10 +50,7 @@ export default function OrdersPage() {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
+    return `Rs ${price.toLocaleString('en-PK')}`;
   };
 
   const formatDate = (dateString: string) => {

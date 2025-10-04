@@ -96,10 +96,7 @@ export default function CheckoutPage() {
   const useDifferentDelivery = watch('useDifferentDelivery');
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
+    return `Rs ${price.toLocaleString('en-PK')}`;
   };
 
   const onSubmit = async (data: CheckoutForm) => {

@@ -194,7 +194,7 @@ export default function AdminPage() {
     },
     {
       title: 'Revenue',
-      value: `$${totalRevenue.toFixed(2)}`,
+      value: `Rs ${totalRevenue.toLocaleString('en-PK')}`,
       icon: DollarSign,
       change: '0%',
       changeType: 'neutral' as const,
@@ -334,7 +334,7 @@ export default function AdminPage() {
                               {product.category?.name}
                             </p>
                             <p className="text-sm font-medium text-primary">
-                              ${product.price}
+                              Rs {product.price.toLocaleString('en-PK')}
                             </p>
                           </div>
                         </div>
