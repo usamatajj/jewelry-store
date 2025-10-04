@@ -105,14 +105,16 @@ export const getParentCategorySlug = (
   subcategorySlug: string
 ): string | undefined => {
   for (const [parentSlug, children] of Object.entries(CATEGORY_HIERARCHY)) {
-    if (children.includes(subcategorySlug as any)) {
+    if ((children as readonly string[]).includes(subcategorySlug)) {
       return parentSlug;
     }
   }
   return undefined;
 };
 
-export const getSubcategoriesByParent = (parentSlug: string): string[] => {
+export const getSubcategoriesByParent = (
+  parentSlug: string
+): readonly string[] => {
   return (
     CATEGORY_HIERARCHY[parentSlug as keyof typeof CATEGORY_HIERARCHY] || []
   );
@@ -157,4 +159,41 @@ export const buildCategoryQuery = (
       parent_category_id: categoryId,
     };
   }
+};
+
+/**
+ * Organize categories into a hierarchical structure
+ * @param categories - Flat array of categories from database
+ * @returns Array of parent categories with children nested
+ */
+export const organizeCategories = (categories: Category[]): Category[] => {
+  const parentCategories = categories.filter((cat) => !cat.parent_id);
+  const childCategories = categories.filter((cat) => cat.parent_id);
+
+  return parentCategories.map((parent) => ({
+    ...parent,
+    children: childCategories.filter((child) => child.parent_id === parent.id),
+  }));
+};
+
+/**
+ * Get all parent categories
+ * @param categories - Flat array of categories
+ * @returns Array of parent categories only
+ */
+export const getParentCategories = (categories: Category[]): Category[] => {
+  return categories.filter((cat) => !cat.parent_id);
+};
+
+/**
+ * Get children of a specific parent category
+ * @param categories - Flat array of categories
+ * @param parentId - ID of the parent category
+ * @returns Array of child categories
+ */
+export const getChildCategories = (
+  categories: Category[],
+  parentId: string
+): Category[] => {
+  return categories.filter((cat) => cat.parent_id === parentId);
 };

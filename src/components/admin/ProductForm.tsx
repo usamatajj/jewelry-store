@@ -8,7 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -23,7 +25,7 @@ import { Category, Product } from '@/types';
 import { createClient } from '@/lib/supabase-client';
 import { toast } from 'sonner';
 import ImageUpload from './ImageUpload';
-import { uploadProductImages, moveTempImagesToProduct } from '@/lib/storage';
+import { uploadProductImages } from '@/lib/storage';
 
 interface ImageFile {
   file: File;
@@ -53,6 +55,18 @@ export default function ProductForm({
     category_id: product?.category_id || '',
   });
   const [productImages, setProductImages] = useState<ImageFile[]>([]);
+
+  // Helper function to get category display name with parent
+  const getCategoryDisplayName = (categoryId: string) => {
+    const category = categories.find((cat) => cat.id === categoryId);
+    if (!category) return 'Select a category';
+
+    if (category.parent_id) {
+      const parent = categories.find((cat) => cat.id === category.parent_id);
+      return parent ? `${parent.name} → ${category.name}` : category.name;
+    }
+    return category.name;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,15 +139,13 @@ export default function ProductForm({
           slug,
         };
 
-        const { data: newProduct, error } = await supabase
+        const { error } = await supabase
           .from('products')
           .insert(insertData)
           .select()
           .single();
 
         if (error) throw error;
-
-        // Images were already included in the insertData above, no need for additional update
 
         toast.success('Product created successfully');
       }
@@ -231,17 +243,62 @@ export default function ProductForm({
                 setFormData({ ...formData, category_id: value })
               }
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a category (subcategory only)">
+                  {formData.category_id
+                    ? getCategoryDisplayName(formData.category_id)
+                    : 'Select a category (subcategory only)'}
+                </SelectValue>
               </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
-                  </SelectItem>
-                ))}
+              <SelectContent className="max-h-[400px]">
+                {(() => {
+                  const parentCategories = categories.filter(
+                    (cat) => !cat.parent_id
+                  );
+                  const childCategories = categories.filter(
+                    (cat) => cat.parent_id
+                  );
+
+                  // Sort parent categories alphabetically
+                  const sortedParents = [...parentCategories].sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                  );
+
+                  return sortedParents.map((parent) => {
+                    const children = childCategories
+                      .filter((child) => child.parent_id === parent.id)
+                      .sort((a, b) => a.name.localeCompare(b.name));
+
+                    if (children.length === 0) return null;
+
+                    return (
+                      <SelectGroup key={parent.id}>
+                        <SelectLabel className="flex items-center gap-2 font-semibold text-gray-900 bg-gray-50 sticky top-0 z-10">
+                          <span className="text-gray-400">▼</span>
+                          {parent.name}
+                        </SelectLabel>
+                        {children.map((child) => (
+                          <SelectItem
+                            key={child.id}
+                            value={child.id}
+                            className="pl-8 cursor-pointer"
+                          >
+                            <span className="flex items-center gap-2">
+                              <span className="text-gray-400 text-xs">└─</span>
+                              {child.name}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    );
+                  });
+                })()}
               </SelectContent>
             </Select>
+            <p className="text-xs text-muted-foreground mt-1">
+              💡 Select a subcategory (e.g., &quot;Necklaces&quot; under
+              &quot;Women&quot;)
+            </p>
           </div>
 
           <div>

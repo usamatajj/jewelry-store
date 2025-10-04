@@ -12,29 +12,45 @@ import {
   Users,
   ShoppingCart,
   DollarSign,
-  Plus,
   Edit,
-  Trash2,
   Eye,
-  Upload,
   BarChart3,
   Search,
-  Filter,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Product, Category } from '@/types';
 import { createClient } from '@/lib/supabase-client';
 import ProductForm from '@/components/admin/ProductForm';
 import CategoryForm from '@/components/admin/CategoryForm';
-import { toast } from 'sonner';
+
+// Admin dashboard types
+interface AdminOrder {
+  id: string;
+  user_id: string | null;
+  email: string;
+  first_name: string;
+  last_name: string;
+  total_amount: number;
+  status: string;
+  payment_status: string;
+  created_at: string;
+  order_items?: unknown[];
+}
+
+interface AdminUser {
+  id: string;
+  email: string;
+  role: string;
+  created_at: string;
+}
 
 export default function AdminPage() {
   const { user, isAdmin, loading } = useAuth();
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [orders, setOrders] = useState<any[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -302,6 +318,7 @@ export default function AdminPage() {
                         <div className="flex items-center space-x-4">
                           <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
                             {product.images && product.images.length > 0 ? (
+                              // eslint-disable-next-line @next/next/no-img-element
                               <img
                                 src={product.images[0]}
                                 alt={product.name}
@@ -377,39 +394,93 @@ export default function AdminPage() {
                     />
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {categories.map((category) => (
-                      <div
-                        key={category.id}
-                        className="p-4 border rounded-lg hover:bg-gray-50"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="font-medium">{category.name}</h3>
-                            <p className="text-sm text-gray-600">
-                              {category.slug}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {category.parent_id
-                                ? 'Subcategory'
-                                : 'Main Category'}
-                            </p>
+                  <div className="space-y-6">
+                    {/* Display parent categories with their children */}
+                    {(() => {
+                      const parentCategories = categories.filter(
+                        (cat) => !cat.parent_id
+                      );
+                      const childCategories = categories.filter(
+                        (cat) => cat.parent_id
+                      );
+
+                      return parentCategories.map((parent) => {
+                        const children = childCategories.filter(
+                          (child) => child.parent_id === parent.id
+                        );
+
+                        return (
+                          <div
+                            key={parent.id}
+                            className="border rounded-lg p-4"
+                          >
+                            {/* Parent Category Header */}
+                            <div className="flex items-center justify-between mb-4 pb-3 border-b">
+                              <div>
+                                <h3 className="text-lg font-semibold">
+                                  {parent.name}
+                                </h3>
+                                <p className="text-sm text-gray-600">
+                                  {parent.slug} • Main Category
+                                </p>
+                              </div>
+                              <CategoryForm
+                                category={parent}
+                                categories={categories}
+                                onSuccess={loadData}
+                                trigger={
+                                  <Button variant="outline" size="sm">
+                                    <Edit className="h-4 w-4 mr-1" />
+                                    Edit
+                                  </Button>
+                                }
+                              />
+                            </div>
+
+                            {/* Subcategories */}
+                            {children.length > 0 ? (
+                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                {children.map((child) => (
+                                  <div
+                                    key={child.id}
+                                    className="p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <div>
+                                        <h4 className="font-medium text-sm">
+                                          {child.name}
+                                        </h4>
+                                        <p className="text-xs text-gray-500">
+                                          {child.slug}
+                                        </p>
+                                      </div>
+                                      <CategoryForm
+                                        category={child}
+                                        categories={categories}
+                                        onSuccess={loadData}
+                                        trigger={
+                                          <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-8 w-8 p-0"
+                                          >
+                                            <Edit className="h-3 w-3" />
+                                          </Button>
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-sm text-gray-500 italic">
+                                No subcategories yet
+                              </p>
+                            )}
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <CategoryForm
-                              category={category}
-                              categories={categories}
-                              onSuccess={loadData}
-                              trigger={
-                                <Button variant="outline" size="sm">
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                        );
+                      });
+                    })()}
                   </div>
                 )}
               </div>
@@ -447,7 +518,7 @@ export default function AdminPage() {
                             Order #{order.id.slice(0, 8)}
                           </h3>
                           <p className="text-sm text-gray-600">
-                            {order.customer_name} - {order.customer_email}
+                            {order.first_name} {order.last_name} - {order.email}
                           </p>
                           <p className="text-sm text-gray-500">
                             {new Date(order.created_at).toLocaleDateString()}
