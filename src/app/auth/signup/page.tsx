@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { createClient } from '@/lib/supabase-client';
 import { useAuth } from '@/contexts/AuthContext';
+import { Loader2 } from 'lucide-react';
 
 const signUpSchema = z
   .object({
@@ -32,7 +33,7 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const {
     register,
@@ -41,6 +42,14 @@ export default function SignUpPage() {
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
   });
+
+  // Redirect if already signed in
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading]);
 
   const onSubmit = async (data: SignUpFormData) => {
     setIsLoading(true);
@@ -57,7 +66,7 @@ export default function SignUpPage() {
         setError(error.message);
       } else if (authData.user && authData.session) {
         // User is immediately signed in (auto-confirm enabled)
-        router.push('/profile');
+        router.push('/');
       } else {
         // User needs to confirm email
         setSuccess(true);
@@ -69,9 +78,19 @@ export default function SignUpPage() {
     }
   };
 
-  // Redirect if already signed in
+  // Show loading state while checking auth
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render form if user is logged in
   if (user) {
-    router.push('/profile');
     return null;
   }
 
