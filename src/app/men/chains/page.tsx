@@ -9,9 +9,7 @@ interface MenChainsPageProps {
   };
 }
 
-export default async function MenChainsPage({
-  searchParams,
-}: MenChainsPageProps) {
+export default async function MenChainsPage({ searchParams }: MenChainsPageProps) {
   return (
     <CategoryPage
       categorySlug="chains"

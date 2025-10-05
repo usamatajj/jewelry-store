@@ -9,9 +9,7 @@ interface MinimalistPageProps {
   };
 }
 
-export default async function MinimalistPage({
-  searchParams,
-}: MinimalistPageProps) {
+export default async function MinimalistPage({ searchParams }: MinimalistPageProps) {
   return (
     <CategoryPage
       categorySlug="minimalist"

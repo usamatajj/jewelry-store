@@ -30,8 +30,7 @@ export async function POST(request: NextRequest) {
     } = orderData;
 
     // Determine payment status based on payment method
-    const payment_status =
-      payment_method === 'bank_transfer' ? 'pending' : 'pending';
+    const payment_status = payment_method === 'bank_transfer' ? 'pending' : 'pending';
 
     // Create the order
     const { data: order, error: orderError } = await supabase
@@ -77,9 +76,7 @@ export async function POST(request: NextRequest) {
       price: item.price,
     }));
 
-    const { error: itemsError } = await supabase
-      .from('order_items')
-      .insert(orderItems);
+    const { error: itemsError } = await supabase.from('order_items').insert(orderItems);
 
     if (itemsError) {
       console.error('Error creating order items:', itemsError);
@@ -171,10 +168,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Order creation error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -185,10 +179,7 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId');
 
     if (!userId) {
-      return NextResponse.json(
-        { error: 'User ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
     // Get orders for the user
@@ -211,10 +202,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Error fetching orders:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch orders' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
     }
 
     // Transform the data to include items
@@ -234,9 +222,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching orders:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

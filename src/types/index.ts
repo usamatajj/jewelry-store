@@ -48,25 +48,13 @@ export type MenCategorySlug = 'wallets' | 'chains' | 'cufflinks' | 'lapel-pins';
 
 export type CoupleCategorySlug = 'matching-sets' | 'his-hers' | 'wedding-bands';
 
-export type GemsCategorySlug =
-  | 'diamonds'
-  | 'gold'
-  | 'silver'
-  | 'pearls'
-  | 'gemstones';
+export type GemsCategorySlug = 'diamonds' | 'gold' | 'silver' | 'pearls' | 'gemstones';
 
 export type PersonalizedCategorySlug = 'engraved' | 'custom' | 'birthstone';
 
-export type GiftingCategorySlug =
-  | 'gift-cards'
-  | 'gift-sets'
-  | 'special-occasions';
+export type GiftingCategorySlug = 'gift-cards' | 'gift-sets' | 'special-occasions';
 
-export type OurWorldCategorySlug =
-  | 'about'
-  | 'sustainability'
-  | 'careers'
-  | 'contact';
+export type OurWorldCategorySlug = 'about' | 'sustainability' | 'careers' | 'contact';
 
 export type AllCategorySlug =
   | MainCategorySlug

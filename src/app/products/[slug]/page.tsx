@@ -78,10 +78,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const relatedProducts = await getRelatedProducts(
-    product.category_id,
-    product.id
-  );
+  const relatedProducts = await getRelatedProducts(product.category_id, product.id);
 
   const formatPrice = (price: number) => {
     return `Rs ${price.toLocaleString('en-PK')}`;
@@ -154,14 +151,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="flex items-center space-x-4 mb-4">
               <div className="flex items-center space-x-1">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                  />
+                  <Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                 ))}
-                <span className="text-sm text-gray-600 ml-2">
-                  (4.8) 124 reviews
-                </span>
+                <span className="text-sm text-gray-600 ml-2">(4.8) 124 reviews</span>
               </div>
             </div>
             <p className="text-3xl font-bold text-primary mb-4">
@@ -173,9 +165,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <div>
             <h3 className="font-semibold mb-2">Description</h3>
-            <p className="text-gray-600 leading-relaxed">
-              {product.description}
-            </p>
+            <p className="text-gray-600 leading-relaxed">{product.description}</p>
           </div>
 
           <div className="space-y-4">

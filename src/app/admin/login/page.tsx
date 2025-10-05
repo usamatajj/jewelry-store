@@ -31,10 +31,7 @@ export default function AdminLoginPage() {
         return;
       }
 
-      if (
-        credentials.email === adminEmail &&
-        credentials.password === adminPassword
-      ) {
+      if (credentials.email === adminEmail && credentials.password === adminPassword) {
         // Create a mock admin user session
         const supabase = await createClient();
 
@@ -55,8 +52,7 @@ export default function AdminLoginPage() {
       }
     } catch (error: unknown) {
       console.error('Login error:', error);
-      const errorMessage =
-        error instanceof Error ? error.message : 'Login failed';
+      const errorMessage = error instanceof Error ? error.message : 'Login failed';
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -78,9 +74,7 @@ export default function AdminLoginPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-center">
-              Sign in to Admin Panel
-            </CardTitle>
+            <CardTitle className="text-center">Sign in to Admin Panel</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -127,11 +121,7 @@ export default function AdminLoginPage() {
             </form>
 
             <div className="mt-6 text-center">
-              <Button
-                variant="link"
-                onClick={() => router.push('/')}
-                className="text-sm"
-              >
+              <Button variant="link" onClick={() => router.push('/')} className="text-sm">
                 ← Back to Store
               </Button>
             </div>

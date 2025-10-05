@@ -95,9 +95,7 @@ export default function HeroCarousel() {
   };
 
   const goToPrevious = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + carouselSlides.length) % carouselSlides.length
-    );
+    setCurrentSlide((prev) => (prev - 1 + carouselSlides.length) % carouselSlides.length);
     setIsAutoPlaying(false);
   };
 

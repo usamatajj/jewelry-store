@@ -9,9 +9,7 @@ interface MenLapelPinsPageProps {
   };
 }
 
-export default async function MenLapelPinsPage({
-  searchParams,
-}: MenLapelPinsPageProps) {
+export default async function MenLapelPinsPage({ searchParams }: MenLapelPinsPageProps) {
   return (
     <CategoryPage
       categorySlug="lapel-pins"

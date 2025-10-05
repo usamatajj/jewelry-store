@@ -9,9 +9,7 @@ interface EngravedPageProps {
   };
 }
 
-export default async function EngravedPage({
-  searchParams,
-}: EngravedPageProps) {
+export default async function EngravedPage({ searchParams }: EngravedPageProps) {
   return (
     <CategoryPage
       categorySlug="engraved"

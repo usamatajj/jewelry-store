@@ -47,21 +47,13 @@ export function ProductsList({ products, categoryName }: ProductsListProps) {
           }
         >
           {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              variant={viewMode}
-            />
+            <ProductCard key={product.id} product={product} variant={viewMode} />
           ))}
         </div>
       ) : (
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">
-            No {categoryName.toLowerCase()} found
-          </p>
-          <p className="text-gray-400">
-            Try adjusting your filters or search terms
-          </p>
+          <p className="text-gray-500 text-lg">No {categoryName.toLowerCase()} found</p>
+          <p className="text-gray-400">Try adjusting your filters or search terms</p>
         </div>
       )}
     </div>

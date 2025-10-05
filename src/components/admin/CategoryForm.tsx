@@ -103,10 +103,7 @@ export default function CategoryForm({
       await supabase.from('products').delete().eq('category_id', category.id);
 
       // Then delete the category
-      const { error } = await supabase
-        .from('categories')
-        .delete()
-        .eq('id', category.id);
+      const { error } = await supabase.from('categories').delete().eq('id', category.id);
 
       if (error) throw error;
       toast.success('Category deleted successfully');
@@ -123,22 +120,17 @@ export default function CategoryForm({
   // Filter out the current category and its children from parent options
   const parentOptions = categories.filter(
     (cat) =>
-      cat.id !== category?.id &&
-      (!category?.parent_id || cat.id !== category.parent_id)
+      cat.id !== category?.id && (!category?.parent_id || cat.id !== category.parent_id)
   );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {trigger || (
-          <Button>{category ? 'Edit Category' : 'Add Category'}</Button>
-        )}
+        {trigger || <Button>{category ? 'Edit Category' : 'Add Category'}</Button>}
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            {category ? 'Edit Category' : 'Add New Category'}
-          </DialogTitle>
+          <DialogTitle>{category ? 'Edit Category' : 'Add New Category'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -146,9 +138,7 @@ export default function CategoryForm({
             <Input
               id="name"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
@@ -157,9 +147,7 @@ export default function CategoryForm({
             <Label htmlFor="parent">Parent Category (Optional)</Label>
             <Select
               value={formData.parent_id}
-              onValueChange={(value) =>
-                setFormData({ ...formData, parent_id: value })
-              }
+              onValueChange={(value) => setFormData({ ...formData, parent_id: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a parent category" />

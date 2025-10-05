@@ -9,9 +9,7 @@ interface MenCufflinksPageProps {
   };
 }
 
-export default async function MenCufflinksPage({
-  searchParams,
-}: MenCufflinksPageProps) {
+export default async function MenCufflinksPage({ searchParams }: MenCufflinksPageProps) {
   return (
     <CategoryPage
       categorySlug="cufflinks"

@@ -9,9 +9,7 @@ interface PersonalizedPageProps {
   };
 }
 
-export default async function PersonalizedPage({
-  searchParams,
-}: PersonalizedPageProps) {
+export default async function PersonalizedPage({ searchParams }: PersonalizedPageProps) {
   return (
     <CategoryPage
       categorySlug="personalized"

@@ -13,10 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Search, Filter, Grid, List } from 'lucide-react';
 import { createClient } from '@/lib/supabase-server';
 import { Product, Category } from '@/types';
-import {
-  getCategoryIdBySlug,
-  getSubcategoriesByParent,
-} from '@/lib/category-utils';
+import { getCategoryIdBySlug, getSubcategoriesByParent } from '@/lib/category-utils';
 
 async function getWomenProducts() {
   const supabase = await createClient();
@@ -58,8 +55,7 @@ export default async function WomenPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-4">Women&apos;s Jewelry</h1>
         <p className="text-gray-600">
-          Discover our stunning collection of jewelry designed specifically for
-          women
+          Discover our stunning collection of jewelry designed specifically for women
         </p>
       </div>
 
@@ -86,9 +82,7 @@ export default async function WomenPage() {
                 <SelectItem value="earrings">Earrings</SelectItem>
                 <SelectItem value="rings">Rings</SelectItem>
                 <SelectItem value="bracelets">Bracelets</SelectItem>
-                <SelectItem value="engagement-rings">
-                  Engagement Rings
-                </SelectItem>
+                <SelectItem value="engagement-rings">Engagement Rings</SelectItem>
                 <SelectItem value="minimalist">Minimalist</SelectItem>
               </SelectContent>
             </Select>

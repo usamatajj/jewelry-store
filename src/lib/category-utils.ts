@@ -101,9 +101,7 @@ export const getCategorySlugById = (id: string): string | undefined => {
   return DB_ID_TO_SLUG[id];
 };
 
-export const getParentCategorySlug = (
-  subcategorySlug: string
-): string | undefined => {
+export const getParentCategorySlug = (subcategorySlug: string): string | undefined => {
   for (const [parentSlug, children] of Object.entries(CATEGORY_HIERARCHY)) {
     if ((children as readonly string[]).includes(subcategorySlug)) {
       return parentSlug;
@@ -112,31 +110,21 @@ export const getParentCategorySlug = (
   return undefined;
 };
 
-export const getSubcategoriesByParent = (
-  parentSlug: string
-): readonly string[] => {
-  return (
-    CATEGORY_HIERARCHY[parentSlug as keyof typeof CATEGORY_HIERARCHY] || []
-  );
+export const getSubcategoriesByParent = (parentSlug: string): readonly string[] => {
+  return CATEGORY_HIERARCHY[parentSlug as keyof typeof CATEGORY_HIERARCHY] || [];
 };
 
 export const isValidCategorySlug = (slug: string): boolean => {
   return slug in DB_CATEGORY_MAPPING;
 };
 
-export const isValidSubcategorySlug = (
-  parentSlug: string,
-  subSlug: string
-): boolean => {
+export const isValidSubcategorySlug = (parentSlug: string, subSlug: string): boolean => {
   const subcategories = getSubcategoriesByParent(parentSlug);
   return subcategories.includes(subSlug);
 };
 
 // Database query helpers
-export const buildCategoryQuery = (
-  categorySlug: string,
-  parentCategorySlug?: string
-) => {
+export const buildCategoryQuery = (categorySlug: string, parentCategorySlug?: string) => {
   const categoryId = getCategoryIdBySlug(categorySlug);
   if (!categoryId) return null;
 

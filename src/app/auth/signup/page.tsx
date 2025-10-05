@@ -81,22 +81,17 @@ export default function SignUpPage() {
         <div className="max-w-md mx-auto">
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl text-center">
-                Check your email
-              </CardTitle>
+              <CardTitle className="text-2xl text-center">Check your email</CardTitle>
             </CardHeader>
             <CardContent>
               <Alert>
                 <AlertDescription>
-                  We've sent you a confirmation link. Please check your email
-                  and click the link to complete your registration.
+                  We've sent you a confirmation link. Please check your email and click
+                  the link to complete your registration.
                 </AlertDescription>
               </Alert>
               <div className="mt-6 text-center">
-                <Link
-                  href="/auth/signin"
-                  className="text-primary hover:underline"
-                >
+                <Link href="/auth/signin" className="text-primary hover:underline">
                   Back to Sign In
                 </Link>
               </div>
@@ -144,9 +139,7 @@ export default function SignUpPage() {
                   {...register('password')}
                 />
                 {errors.password && (
-                  <p className="text-sm text-red-500">
-                    {errors.password.message}
-                  </p>
+                  <p className="text-sm text-red-500">{errors.password.message}</p>
                 )}
               </div>
 
@@ -159,9 +152,7 @@ export default function SignUpPage() {
                   {...register('confirmPassword')}
                 />
                 {errors.confirmPassword && (
-                  <p className="text-sm text-red-500">
-                    {errors.confirmPassword.message}
-                  </p>
+                  <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
                 )}
               </div>
 
@@ -173,10 +164,7 @@ export default function SignUpPage() {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Already have an account?{' '}
-                <Link
-                  href="/auth/signin"
-                  className="text-primary hover:underline"
-                >
+                <Link href="/auth/signin" className="text-primary hover:underline">
                   Sign in
                 </Link>
               </p>

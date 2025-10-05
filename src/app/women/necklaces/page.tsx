@@ -9,9 +9,7 @@ interface NecklacesPageProps {
   }>;
 }
 
-export default async function NecklacesPage({
-  searchParams,
-}: NecklacesPageProps) {
+export default async function NecklacesPage({ searchParams }: NecklacesPageProps) {
   return (
     <CategoryPage
       categorySlug="necklaces"

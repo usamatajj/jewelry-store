@@ -9,9 +9,7 @@ interface BraceletsPageProps {
   };
 }
 
-export default async function BraceletsPage({
-  searchParams,
-}: BraceletsPageProps) {
+export default async function BraceletsPage({ searchParams }: BraceletsPageProps) {
   return (
     <CategoryPage
       categorySlug="bracelets"

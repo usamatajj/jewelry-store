@@ -9,9 +9,7 @@ interface MatchingSetsPageProps {
   };
 }
 
-export default async function MatchingSetsPage({
-  searchParams,
-}: MatchingSetsPageProps) {
+export default async function MatchingSetsPage({ searchParams }: MatchingSetsPageProps) {
   return (
     <CategoryPage
       categorySlug="matching-sets"

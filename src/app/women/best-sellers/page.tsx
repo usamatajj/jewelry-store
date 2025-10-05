@@ -9,9 +9,7 @@ interface BestSellersPageProps {
   };
 }
 
-export default async function BestSellersPage({
-  searchParams,
-}: BestSellersPageProps) {
+export default async function BestSellersPage({ searchParams }: BestSellersPageProps) {
   return (
     <CategoryPage
       categorySlug="best-sellers"

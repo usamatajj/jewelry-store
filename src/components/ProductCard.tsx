@@ -113,9 +113,7 @@ export function ProductCard({
               {product.name}
             </h3>
           </Link>
-          <p className="text-sm text-gray-600 line-clamp-2">
-            {product.description}
-          </p>
+          <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
           <div className="flex items-center justify-between">
             <span className="text-xl font-bold text-primary">
               {formatPrice(product.price)}

@@ -9,9 +9,7 @@ interface GemstonesPageProps {
   };
 }
 
-export default async function GemstonesPage({
-  searchParams,
-}: GemstonesPageProps) {
+export default async function GemstonesPage({ searchParams }: GemstonesPageProps) {
   return (
     <CategoryPage
       categorySlug="gemstones"

@@ -20,9 +20,9 @@ export default function SustainabilityPage() {
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-6">Our Commitment</h2>
         <p className="text-gray-600 mb-6 max-w-3xl">
-          We believe that beautiful jewelry should also be responsible jewelry.
-          That's why we're committed to sustainable practices throughout our
-          entire supply chain, from sourcing to packaging.
+          We believe that beautiful jewelry should also be responsible jewelry. That's why
+          we're committed to sustainable practices throughout our entire supply chain,
+          from sourcing to packaging.
         </p>
       </div>
 
@@ -49,9 +49,7 @@ export default function SustainabilityPage() {
           <CardHeader>
             <Recycle className="h-8 w-8 text-blue-600 mb-2" />
             <CardTitle>Eco-Friendly Packaging</CardTitle>
-            <CardDescription>
-              Sustainable packaging for every order
-            </CardDescription>
+            <CardDescription>Sustainable packaging for every order</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-gray-600">
@@ -67,9 +65,7 @@ export default function SustainabilityPage() {
           <CardHeader>
             <Heart className="h-8 w-8 text-red-600 mb-2" />
             <CardTitle>Community Support</CardTitle>
-            <CardDescription>
-              Supporting local communities and artisans
-            </CardDescription>
+            <CardDescription>Supporting local communities and artisans</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-gray-600">
@@ -85,9 +81,7 @@ export default function SustainabilityPage() {
           <CardHeader>
             <Shield className="h-8 w-8 text-purple-600 mb-2" />
             <CardTitle>Quality & Longevity</CardTitle>
-            <CardDescription>
-              Creating jewelry that lasts generations
-            </CardDescription>
+            <CardDescription>Creating jewelry that lasts generations</CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-gray-600">

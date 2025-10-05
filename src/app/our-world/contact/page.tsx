@@ -17,8 +17,7 @@ export default function ContactPage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
         <p className="text-xl text-gray-600">
-          We'd love to hear from you. Get in touch with any questions or
-          feedback.
+          We'd love to hear from you. Get in touch with any questions or feedback.
         </p>
       </div>
 

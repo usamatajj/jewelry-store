@@ -101,9 +101,7 @@ export default function SignInPage() {
                   {...register('password')}
                 />
                 {errors.password && (
-                  <p className="text-sm text-red-500">
-                    {errors.password.message}
-                  </p>
+                  <p className="text-sm text-red-500">{errors.password.message}</p>
                 )}
               </div>
 
@@ -115,10 +113,7 @@ export default function SignInPage() {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
-                <Link
-                  href="/auth/signup"
-                  className="text-primary hover:underline"
-                >
+                <Link href="/auth/signup" className="text-primary hover:underline">
                   Sign up
                 </Link>
               </p>

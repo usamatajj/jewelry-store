@@ -9,9 +9,7 @@ interface MenWalletsPageProps {
   }>;
 }
 
-export default async function MenWalletsPage({
-  searchParams,
-}: MenWalletsPageProps) {
+export default async function MenWalletsPage({ searchParams }: MenWalletsPageProps) {
   return (
     <CategoryPage
       categorySlug="wallets"

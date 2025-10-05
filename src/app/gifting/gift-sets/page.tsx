@@ -9,9 +9,7 @@ interface GiftSetsPageProps {
   };
 }
 
-export default async function GiftSetsPage({
-  searchParams,
-}: GiftSetsPageProps) {
+export default async function GiftSetsPage({ searchParams }: GiftSetsPageProps) {
   return (
     <CategoryPage
       categorySlug="gift-sets"

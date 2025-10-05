@@ -221,12 +221,8 @@ export default function ImageUpload({
                 </div>
               </Card>
               <div className="mt-1 text-xs text-gray-500 text-center truncate">
-                {existingImages.length === 0 &&
-                  index === 0 &&
-                  'Main Image (New)'}
-                {existingImages.length === 0 &&
-                  index > 0 &&
-                  `Image ${index + 1} (New)`}
+                {existingImages.length === 0 && index === 0 && 'Main Image (New)'}
+                {existingImages.length === 0 && index > 0 && `Image ${index + 1} (New)`}
                 {existingImages.length > 0 && `New Image ${index + 1}`}
               </div>
             </div>
@@ -250,8 +246,8 @@ export default function ImageUpload({
       {/* Helper Text */}
       {images.length === 0 && existingImages.length === 0 && (
         <p className="text-sm text-red-500 font-medium">
-          ⚠️ At least one image is required for the product. The first image
-          will be used as the main product image.
+          ⚠️ At least one image is required for the product. The first image will be used
+          as the main product image.
         </p>
       )}
     </div>

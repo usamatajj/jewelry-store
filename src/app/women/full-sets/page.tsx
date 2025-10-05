@@ -9,9 +9,7 @@ interface FullSetsPageProps {
   };
 }
 
-export default async function FullSetsPage({
-  searchParams,
-}: FullSetsPageProps) {
+export default async function FullSetsPage({ searchParams }: FullSetsPageProps) {
   return (
     <CategoryPage
       categorySlug="full-sets"

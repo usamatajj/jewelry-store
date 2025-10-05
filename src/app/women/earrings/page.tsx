@@ -9,9 +9,7 @@ interface EarringsPageProps {
   }>;
 }
 
-export default async function EarringsPage({
-  searchParams,
-}: EarringsPageProps) {
+export default async function EarringsPage({ searchParams }: EarringsPageProps) {
   return (
     <CategoryPage
       categorySlug="earrings"

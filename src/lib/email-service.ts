@@ -19,9 +19,7 @@ interface OrderConfirmationData {
   orderTrackingURL: string;
 }
 
-export async function sendOrderConfirmationEmail(
-  orderData: OrderConfirmationData
-) {
+export async function sendOrderConfirmationEmail(orderData: OrderConfirmationData) {
   try {
     const supabase = await createClient();
 
@@ -67,9 +65,7 @@ function createOrderConfirmationHTML(data: OrderConfirmationData): string {
       (item) => `
     <div class="order-item">
       <span class="item-name">${item.name} (Qty: ${item.quantity})</span>
-      <span class="item-price">$${(item.price * item.quantity).toFixed(
-        2
-      )}</span>
+      <span class="item-price">$${(item.price * item.quantity).toFixed(2)}</span>
     </div>
   `
     )
@@ -216,9 +212,7 @@ function createOrderConfirmationHTML(data: OrderConfirmationData): string {
               <div class="order-item">
                 <span>Shipping:</span>
                 <span>${
-                  data.shippingCost === 0
-                    ? 'Free'
-                    : `$${data.shippingCost.toFixed(2)}`
+                  data.shippingCost === 0 ? 'Free' : `$${data.shippingCost.toFixed(2)}`
                 }</span>
               </div>
               <div class="order-item">
@@ -236,9 +230,7 @@ function createOrderConfirmationHTML(data: OrderConfirmationData): string {
                 <strong>Ship to:</strong><br />
                 ${data.shippingAddress}
               </p>
-              <p><strong>Estimated Delivery:</strong> ${
-                data.estimatedDelivery
-              }</p>
+              <p><strong>Estimated Delivery:</strong> ${data.estimatedDelivery}</p>
             </div>
 
             <p>

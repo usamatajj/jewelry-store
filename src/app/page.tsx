@@ -28,9 +28,7 @@ export default function Home() {
                 <Shield className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Secure Payment</h3>
-              <p className="text-gray-600">
-                Your payment information is safe and secure
-              </p>
+              <p className="text-gray-600">Your payment information is safe and secure</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -49,12 +47,10 @@ export default function Home() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Shop by Category
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Shop by Category</h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Explore our carefully curated collections designed for every style
-              and occasion
+              Explore our carefully curated collections designed for every style and
+              occasion
             </p>
           </div>
 
@@ -123,14 +119,10 @@ export default function Home() {
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">
-                    {category.name}
-                  </h3>
+                  <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
                   <p className="text-gray-600 mb-4">{category.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
-                      {category.count}
-                    </span>
+                    <span className="text-sm text-gray-500">{category.count}</span>
                     <Link href={category.href}>
                       <Button variant="outline" size="sm">
                         Shop Now
@@ -152,8 +144,8 @@ export default function Home() {
             Ready to Find Your Perfect Piece?
           </h2>
           <p className="text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
-            Browse our extensive collection and discover jewelry that speaks to
-            your style and personality.
+            Browse our extensive collection and discover jewelry that speaks to your style
+            and personality.
           </p>
           <Button
             size="lg"

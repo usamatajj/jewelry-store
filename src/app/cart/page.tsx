@@ -106,22 +106,16 @@ export default function CartPage() {
                         variant="outline"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() =>
-                          updateQuantity(item.product.id, item.quantity - 1)
-                        }
+                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
                       >
                         <Minus className="h-4 w-4" />
                       </Button>
-                      <span className="w-8 text-center font-medium">
-                        {item.quantity}
-                      </span>
+                      <span className="w-8 text-center font-medium">{item.quantity}</span>
                       <Button
                         variant="outline"
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() =>
-                          updateQuantity(item.product.id, item.quantity + 1)
-                        }
+                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
                       >
                         <Plus className="h-4 w-4" />
                       </Button>
@@ -170,9 +164,7 @@ export default function CartPage() {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span>Subtotal ({state.itemCount} items)</span>
-                  <span className="font-medium">
-                    {formatPrice(state.total)}
-                  </span>
+                  <span className="font-medium">{formatPrice(state.total)}</span>
                 </div>
 
                 <div className="flex justify-between">
@@ -184,9 +176,7 @@ export default function CartPage() {
 
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span className="font-medium">
-                    {formatPrice(state.total * 0.08)}
-                  </span>
+                  <span className="font-medium">{formatPrice(state.total * 0.08)}</span>
                 </div>
 
                 <Separator />
@@ -195,9 +185,7 @@ export default function CartPage() {
                   <span>Total</span>
                   <span>
                     {formatPrice(
-                      state.total +
-                        (state.total >= 100 ? 0 : 9.99) +
-                        state.total * 0.08
+                      state.total + (state.total >= 100 ? 0 : 9.99) + state.total * 0.08
                     )}
                   </span>
                 </div>

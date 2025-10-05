@@ -10,13 +10,7 @@ import { cn } from '@/lib/utils';
 interface AddToCartButtonProps {
   product: Product;
   className?: string;
-  variant?:
-    | 'default'
-    | 'destructive'
-    | 'outline'
-    | 'secondary'
-    | 'ghost'
-    | 'link';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
   size?: 'default' | 'sm' | 'lg' | 'icon';
 }
 

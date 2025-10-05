@@ -9,9 +9,7 @@ interface WeddingBandsPageProps {
   };
 }
 
-export default async function WeddingBandsPage({
-  searchParams,
-}: WeddingBandsPageProps) {
+export default async function WeddingBandsPage({ searchParams }: WeddingBandsPageProps) {
   return (
     <CategoryPage
       categorySlug="wedding-bands"

@@ -165,10 +165,7 @@ export default function AdminPage() {
   });
 
   // Calculate total revenue
-  const totalRevenue = orders.reduce(
-    (sum, order) => sum + (order.total_amount || 0),
-    0
-  );
+  const totalRevenue = orders.reduce((sum, order) => sum + (order.total_amount || 0), 0);
 
   const stats = [
     {
@@ -215,9 +212,7 @@ export default function AdminPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">
-                    {stat.title}
-                  </p>
+                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
                   <p className="text-2xl font-bold">{stat.value}</p>
                 </div>
                 <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -226,9 +221,7 @@ export default function AdminPage() {
               </div>
               <div className="mt-4">
                 <Badge
-                  variant={
-                    stat.changeType === 'positive' ? 'default' : 'secondary'
-                  }
+                  variant={stat.changeType === 'positive' ? 'default' : 'secondary'}
                   className="text-xs"
                 >
                   {stat.change}
@@ -302,10 +295,7 @@ export default function AdminPage() {
                         : 'Get started by adding your first product'}
                     </p>
                     {!searchTerm && selectedCategory === 'all' && (
-                      <ProductForm
-                        categories={categories}
-                        onSuccess={loadData}
-                      />
+                      <ProductForm categories={categories} onSuccess={loadData} />
                     )}
                   </div>
                 ) : (
@@ -388,21 +378,14 @@ export default function AdminPage() {
                     <p className="text-gray-600 mb-4">
                       Create categories to organize your products
                     </p>
-                    <CategoryForm
-                      categories={categories}
-                      onSuccess={loadData}
-                    />
+                    <CategoryForm categories={categories} onSuccess={loadData} />
                   </div>
                 ) : (
                   <div className="space-y-6">
                     {/* Display parent categories with their children */}
                     {(() => {
-                      const parentCategories = categories.filter(
-                        (cat) => !cat.parent_id
-                      );
-                      const childCategories = categories.filter(
-                        (cat) => cat.parent_id
-                      );
+                      const parentCategories = categories.filter((cat) => !cat.parent_id);
+                      const childCategories = categories.filter((cat) => cat.parent_id);
 
                       return parentCategories.map((parent) => {
                         const children = childCategories.filter(
@@ -410,16 +393,11 @@ export default function AdminPage() {
                         );
 
                         return (
-                          <div
-                            key={parent.id}
-                            className="border rounded-lg p-4"
-                          >
+                          <div key={parent.id} className="border rounded-lg p-4">
                             {/* Parent Category Header */}
                             <div className="flex items-center justify-between mb-4 pb-3 border-b">
                               <div>
-                                <h3 className="text-lg font-semibold">
-                                  {parent.name}
-                                </h3>
+                                <h3 className="text-lg font-semibold">{parent.name}</h3>
                                 <p className="text-sm text-gray-600">
                                   {parent.slug} • Main Category
                                 </p>
@@ -514,9 +492,7 @@ export default function AdminPage() {
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium">
-                            Order #{order.id.slice(0, 8)}
-                          </h3>
+                          <h3 className="font-medium">Order #{order.id.slice(0, 8)}</h3>
                           <p className="text-sm text-gray-600">
                             {order.first_name} {order.last_name} - {order.email}
                           </p>
@@ -530,9 +506,7 @@ export default function AdminPage() {
                         <div className="flex items-center space-x-2">
                           <Badge
                             variant={
-                              order.status === 'completed'
-                                ? 'default'
-                                : 'secondary'
+                              order.status === 'completed' ? 'default' : 'secondary'
                             }
                           >
                             {order.status}
@@ -560,9 +534,7 @@ export default function AdminPage() {
               {users.length === 0 ? (
                 <div className="text-center py-12">
                   <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    No users yet
-                  </h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No users yet</h3>
                   <p className="text-gray-600">
                     User accounts will appear here once customers sign up
                   </p>
@@ -570,26 +542,18 @@ export default function AdminPage() {
               ) : (
                 <div className="space-y-4">
                   {users.map((user) => (
-                    <div
-                      key={user.id}
-                      className="p-4 border rounded-lg hover:bg-gray-50"
-                    >
+                    <div key={user.id} className="p-4 border rounded-lg hover:bg-gray-50">
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-medium">{user.email}</h3>
-                          <p className="text-sm text-gray-600">
-                            Role: {user.role}
-                          </p>
+                          <p className="text-sm text-gray-600">Role: {user.role}</p>
                           <p className="text-sm text-gray-500">
-                            Joined:{' '}
-                            {new Date(user.created_at).toLocaleDateString()}
+                            Joined: {new Date(user.created_at).toLocaleDateString()}
                           </p>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Badge
-                            variant={
-                              user.role === 'admin' ? 'default' : 'secondary'
-                            }
+                            variant={user.role === 'admin' ? 'default' : 'secondary'}
                           >
                             {user.role}
                           </Badge>

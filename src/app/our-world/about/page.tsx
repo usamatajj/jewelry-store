@@ -21,21 +21,19 @@ export default function AboutPage() {
         <div>
           <h2 className="text-2xl font-bold mb-6">Our Story</h2>
           <p className="text-gray-600 mb-4">
-            Founded in 1985 by master jeweler Maria Rodriguez, our jewelry store
-            began as a small family business with a simple mission: to create
-            beautiful, high-quality jewelry that celebrates life's most precious
-            moments.
+            Founded in 1985 by master jeweler Maria Rodriguez, our jewelry store began as
+            a small family business with a simple mission: to create beautiful,
+            high-quality jewelry that celebrates life's most precious moments.
           </p>
           <p className="text-gray-600 mb-4">
-            What started as a small workshop has grown into a trusted name in
-            fine jewelry, but we've never lost sight of our roots. Every piece
-            we create is still handcrafted with the same attention to detail and
-            passion that Maria brought to her work over three decades ago.
+            What started as a small workshop has grown into a trusted name in fine
+            jewelry, but we've never lost sight of our roots. Every piece we create is
+            still handcrafted with the same attention to detail and passion that Maria
+            brought to her work over three decades ago.
           </p>
           <p className="text-gray-600">
-            Today, we're proud to serve customers around the world while
-            maintaining our commitment to quality, craftsmanship, and ethical
-            sourcing.
+            Today, we're proud to serve customers around the world while maintaining our
+            commitment to quality, craftsmanship, and ethical sourcing.
           </p>
         </div>
 
@@ -102,8 +100,8 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600">
-              From engagement rings to anniversary gifts, we've helped celebrate
-              countless special moments.
+              From engagement rings to anniversary gifts, we've helped celebrate countless
+              special moments.
             </p>
           </CardContent>
         </Card>

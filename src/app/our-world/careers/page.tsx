@@ -14,8 +14,7 @@ export default function CareersPage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-4">Careers</h1>
         <p className="text-xl text-gray-600">
-          Join our team and be part of creating beautiful jewelry that lasts a
-          lifetime
+          Join our team and be part of creating beautiful jewelry that lasts a lifetime
         </p>
       </div>
 
@@ -29,8 +28,8 @@ export default function CareersPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">
-                Work alongside passionate, skilled professionals who share your
-                love for quality craftsmanship.
+                Work alongside passionate, skilled professionals who share your love for
+                quality craftsmanship.
               </p>
             </CardContent>
           </Card>
@@ -42,8 +41,8 @@ export default function CareersPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">
-                We invest in our team with training, development programs, and
-                advancement opportunities.
+                We invest in our team with training, development programs, and advancement
+                opportunities.
               </p>
             </CardContent>
           </Card>
@@ -55,8 +54,8 @@ export default function CareersPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">
-                Be part of creating jewelry that celebrates life's most precious
-                moments and memories.
+                Be part of creating jewelry that celebrates life's most precious moments
+                and memories.
               </p>
             </CardContent>
           </Card>
@@ -73,9 +72,8 @@ export default function CareersPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600 mb-4">
-                We're looking for a creative jewelry designer to join our design
-                team. You'll work on creating new collections and custom pieces
-                for our clients.
+                We're looking for a creative jewelry designer to join our design team.
+                You'll work on creating new collections and custom pieces for our clients.
               </p>
               <Button variant="outline">Apply Now</Button>
             </CardContent>
@@ -88,8 +86,8 @@ export default function CareersPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600 mb-4">
-                Join our sales team and help customers find the perfect piece of
-                jewelry for their special occasions.
+                Join our sales team and help customers find the perfect piece of jewelry
+                for their special occasions.
               </p>
               <Button variant="outline">Apply Now</Button>
             </CardContent>
@@ -102,8 +100,8 @@ export default function CareersPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600 mb-4">
-                We need a skilled jeweler to handle repairs, resizing, and
-                maintenance of our customers' precious pieces.
+                We need a skilled jeweler to handle repairs, resizing, and maintenance of
+                our customers' precious pieces.
               </p>
               <Button variant="outline">Apply Now</Button>
             </CardContent>
@@ -114,8 +112,8 @@ export default function CareersPage() {
       <div className="bg-gray-50 rounded-lg p-8 text-center">
         <h2 className="text-2xl font-bold mb-4">Don't See Your Role?</h2>
         <p className="text-gray-600 mb-6">
-          We're always looking for talented individuals to join our team. Send
-          us your resume and let us know how you'd like to contribute.
+          We're always looking for talented individuals to join our team. Send us your
+          resume and let us know how you'd like to contribute.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button>

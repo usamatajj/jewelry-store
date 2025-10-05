@@ -118,7 +118,7 @@ export async function uploadPaymentScreenshot(
   const timestamp = Date.now();
   const randomId = Math.random().toString(36).substring(2, 15);
   const fileExtension = file.name.split('.').pop();
-  
+
   // Store in orders folder with order ID if available, otherwise temp
   const fileName = orderId
     ? `orders/${orderId}/payment-${timestamp}.${fileExtension}`
@@ -197,9 +197,7 @@ export async function movePaymentScreenshotToOrder(
 export async function deletePaymentScreenshot(path: string): Promise<void> {
   const supabase = await createClient();
 
-  const { error } = await supabase.storage
-    .from('payment-screenshots')
-    .remove([path]);
+  const { error } = await supabase.storage.from('payment-screenshots').remove([path]);
 
   if (error) {
     console.error('Error deleting payment screenshot:', error);

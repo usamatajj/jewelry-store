@@ -168,10 +168,7 @@ export default function ProductForm({
     setLoading(true);
     try {
       const supabase = await createClient();
-      const { error } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', product.id);
+      const { error } = await supabase.from('products').delete().eq('id', product.id);
 
       if (error) throw error;
       toast.success('Product deleted successfully');
@@ -192,9 +189,7 @@ export default function ProductForm({
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {product ? 'Edit Product' : 'Add New Product'}
-          </DialogTitle>
+          <DialogTitle>{product ? 'Edit Product' : 'Add New Product'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div>
@@ -202,9 +197,7 @@ export default function ProductForm({
             <Input
               id="name"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
             />
           </div>
@@ -214,9 +207,7 @@ export default function ProductForm({
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
             />
           </div>
@@ -228,9 +219,7 @@ export default function ProductForm({
               type="number"
               step="0.01"
               value={formData.price}
-              onChange={(e) =>
-                setFormData({ ...formData, price: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
               required
             />
           </div>
@@ -239,9 +228,7 @@ export default function ProductForm({
             <Label htmlFor="category">Category</Label>
             <Select
               value={formData.category_id}
-              onValueChange={(value) =>
-                setFormData({ ...formData, category_id: value })
-              }
+              onValueChange={(value) => setFormData({ ...formData, category_id: value })}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a category (subcategory only)">
@@ -252,12 +239,8 @@ export default function ProductForm({
               </SelectTrigger>
               <SelectContent className="max-h-[400px]">
                 {(() => {
-                  const parentCategories = categories.filter(
-                    (cat) => !cat.parent_id
-                  );
-                  const childCategories = categories.filter(
-                    (cat) => cat.parent_id
-                  );
+                  const parentCategories = categories.filter((cat) => !cat.parent_id);
+                  const childCategories = categories.filter((cat) => cat.parent_id);
 
                   // Sort parent categories alphabetically
                   const sortedParents = [...parentCategories].sort((a, b) =>
@@ -304,9 +287,7 @@ export default function ProductForm({
           <div>
             <ImageUpload
               onImagesChange={setProductImages}
-              initialImages={
-                product?.images?.map((url) => ({ url, path: '' })) || []
-              }
+              initialImages={product?.images?.map((url) => ({ url, path: '' })) || []}
               maxImages={5}
             />
             <p className="text-xs text-gray-500 mt-2">

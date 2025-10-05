@@ -73,9 +73,7 @@ export default function ProfilePage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-medium">Role:</span>
-                  <Badge
-                    variant={user.role === 'admin' ? 'default' : 'secondary'}
-                  >
+                  <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
                     {user.role}
                   </Badge>
                 </div>
@@ -114,9 +112,7 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-primary mb-2">
-                    {items.length}
-                  </p>
+                  <p className="text-2xl font-bold text-primary mb-2">{items.length}</p>
                   <p className="text-gray-600 mb-4">Items in cart</p>
                   <Button asChild className="w-full">
                     <Link href="/cart">View Cart</Link>

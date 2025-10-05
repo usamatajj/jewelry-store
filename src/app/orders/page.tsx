@@ -119,9 +119,7 @@ export default function OrdersPage() {
           <CardContent className="text-center py-12">
             <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h2 className="text-xl font-semibold mb-2">No orders yet</h2>
-            <p className="text-gray-600 mb-6">
-              Start shopping to see your orders here.
-            </p>
+            <p className="text-gray-600 mb-6">Start shopping to see your orders here.</p>
             <Link href="/products">
               <Button>Browse Products</Button>
             </Link>
@@ -139,8 +137,7 @@ export default function OrdersPage() {
                   </CardTitle>
                   <div className="flex items-center space-x-2">
                     <Badge className={getStatusColor(order.status)}>
-                      {order.status.charAt(0).toUpperCase() +
-                        order.status.slice(1)}
+                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </Badge>
                     <Badge variant="outline">
                       {order.payment_status.charAt(0).toUpperCase() +
@@ -166,10 +163,7 @@ export default function OrdersPage() {
                     <h4 className="font-semibold mb-2">Items:</h4>
                     <div className="space-y-2">
                       {order.items.map((item, index) => (
-                        <div
-                          key={index}
-                          className="flex justify-between text-sm"
-                        >
+                        <div key={index} className="flex justify-between text-sm">
                           <span>
                             {item.product_name} (Qty: {item.quantity})
                           </span>

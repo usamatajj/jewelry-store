@@ -9,9 +9,7 @@ interface DiamondsPageProps {
   }>;
 }
 
-export default async function DiamondsPage({
-  searchParams,
-}: DiamondsPageProps) {
+export default async function DiamondsPage({ searchParams }: DiamondsPageProps) {
   return (
     <CategoryPage
       categorySlug="diamonds"

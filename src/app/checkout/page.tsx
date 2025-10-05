@@ -60,10 +60,7 @@ const checkoutSchema = z
     (data) => {
       // If bank transfer is selected, screenshot is required
       if (data.paymentMethod === 'bank_transfer') {
-        return (
-          data.paymentScreenshot !== undefined &&
-          data.paymentScreenshot !== null
-        );
+        return data.paymentScreenshot !== undefined && data.paymentScreenshot !== null;
       }
       return true;
     },
@@ -245,8 +242,7 @@ export default function CheckoutPage() {
             </div>
             <h1 className="text-3xl font-bold mb-2">Order Confirmed!</h1>
             <p className="text-gray-600">
-              Thank you for your order. We&apos;ll send you a confirmation email
-              shortly.
+              Thank you for your order. We&apos;ll send you a confirmation email shortly.
             </p>
           </div>
 
@@ -265,15 +261,9 @@ export default function CheckoutPage() {
                   {paymentMethod === 'bank_transfer' ? (
                     <ul className="text-sm text-gray-600 space-y-1">
                       <li>✓ We&apos;ve received your payment screenshot</li>
-                      <li>
-                        ✓ Our team will verify your payment within 24 hours
-                      </li>
-                      <li>
-                        ✓ Once verified, we&apos;ll start processing your order
-                      </li>
-                      <li>
-                        ✓ You&apos;ll receive tracking information via email
-                      </li>
+                      <li>✓ Our team will verify your payment within 24 hours</li>
+                      <li>✓ Once verified, we&apos;ll start processing your order</li>
+                      <li>✓ You&apos;ll receive tracking information via email</li>
                     </ul>
                   ) : (
                     <ul className="text-sm text-gray-600 space-y-1">
@@ -354,9 +344,9 @@ export default function CheckoutPage() {
               <AlertCircle className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
                 <p className="text-sm text-blue-800">
-                  <strong>Guest Checkout:</strong> You can place an order
-                  without creating an account. We&apos;ll use your email to send
-                  order confirmation and updates.
+                  <strong>Guest Checkout:</strong> You can place an order without creating
+                  an account. We&apos;ll use your email to send order confirmation and
+                  updates.
                 </p>
                 <p className="text-sm text-blue-700 mt-2">
                   Have an account?{' '}
@@ -422,9 +412,7 @@ export default function CheckoutPage() {
                     className={errors.email ? 'border-red-500' : ''}
                   />
                   {errors.email && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {errors.email.message}
-                    </p>
+                    <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
                   )}
                 </div>
 
@@ -438,9 +426,7 @@ export default function CheckoutPage() {
                     className={errors.phone ? 'border-red-500' : ''}
                   />
                   {errors.phone && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {errors.phone.message}
-                    </p>
+                    <p className="text-sm text-red-500 mt-1">{errors.phone.message}</p>
                   )}
                 </div>
               </CardContent>
@@ -461,9 +447,7 @@ export default function CheckoutPage() {
                     className={errors.address ? 'border-red-500' : ''}
                   />
                   {errors.address && (
-                    <p className="text-sm text-red-500 mt-1">
-                      {errors.address.message}
-                    </p>
+                    <p className="text-sm text-red-500 mt-1">{errors.address.message}</p>
                   )}
                 </div>
 
@@ -476,9 +460,7 @@ export default function CheckoutPage() {
                       className={errors.city ? 'border-red-500' : ''}
                     />
                     {errors.city && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.city.message}
-                      </p>
+                      <p className="text-sm text-red-500 mt-1">{errors.city.message}</p>
                     )}
                   </div>
                   <div>
@@ -490,9 +472,7 @@ export default function CheckoutPage() {
                       className={errors.state ? 'border-red-500' : ''}
                     />
                     {errors.state && (
-                      <p className="text-sm text-red-500 mt-1">
-                        {errors.state.message}
-                      </p>
+                      <p className="text-sm text-red-500 mt-1">{errors.state.message}</p>
                     )}
                   </div>
                 </div>
@@ -557,10 +537,7 @@ export default function CheckoutPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="deliveryCity">City *</Label>
-                        <Input
-                          id="deliveryCity"
-                          {...register('deliveryCity')}
-                        />
+                        <Input id="deliveryCity" {...register('deliveryCity')} />
                       </div>
                       <div>
                         <Label htmlFor="deliveryState">Province *</Label>
@@ -574,10 +551,7 @@ export default function CheckoutPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="deliveryZipCode">Postal Code *</Label>
-                        <Input
-                          id="deliveryZipCode"
-                          {...register('deliveryZipCode')}
-                        />
+                        <Input id="deliveryZipCode" {...register('deliveryZipCode')} />
                       </div>
                       <div>
                         <Label htmlFor="deliveryCountry">Country *</Label>
@@ -651,10 +625,7 @@ export default function CheckoutPage() {
                           </div>
 
                           <div className="mt-4">
-                            <Label
-                              htmlFor="paymentScreenshot"
-                              className="block mb-2"
-                            >
+                            <Label htmlFor="paymentScreenshot" className="block mb-2">
                               Upload Payment Screenshot *
                             </Label>
                             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
@@ -699,14 +670,9 @@ export default function CheckoutPage() {
                         ? 'border-primary bg-primary/5'
                         : 'border-gray-200'
                     }`}
-                    onClick={() =>
-                      setValue('paymentMethod', 'cash_on_delivery')
-                    }
+                    onClick={() => setValue('paymentMethod', 'cash_on_delivery')}
                   >
-                    <RadioGroupItem
-                      value="cash_on_delivery"
-                      id="cash_on_delivery"
-                    />
+                    <RadioGroupItem value="cash_on_delivery" id="cash_on_delivery" />
                     <div className="flex-1">
                       <Label
                         htmlFor="cash_on_delivery"
@@ -765,9 +731,7 @@ export default function CheckoutPage() {
                         <p className="text-sm font-medium truncate">
                           {item.product.name}
                         </p>
-                        <p className="text-xs text-gray-600">
-                          Qty: {item.quantity}
-                        </p>
+                        <p className="text-xs text-gray-600">Qty: {item.quantity}</p>
                         <p className="text-sm font-medium text-primary">
                           {formatPrice(item.product.price * item.quantity)}
                         </p>

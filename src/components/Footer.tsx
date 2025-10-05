@@ -1,12 +1,5 @@
 import Link from 'next/link';
-import {
-  Facebook,
-  Instagram,
-  Twitter,
-  Mail,
-  Phone,
-  MapPin,
-} from 'lucide-react';
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -20,9 +13,8 @@ export function Footer() {
               <span className="text-xl font-bold">Jewelry Store</span>
             </div>
             <p className="text-gray-300 text-sm">
-              Discover exquisite jewelry pieces crafted with precision and
-              passion. From elegant necklaces to stunning rings, find your
-              perfect piece.
+              Discover exquisite jewelry pieces crafted with precision and passion. From
+              elegant necklaces to stunning rings, find your perfect piece.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 hover:text-primary cursor-pointer" />
@@ -72,10 +64,7 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Customer Service</h3>
             <div className="space-y-2">
-              <Link
-                href="/faq"
-                className="block text-gray-300 hover:text-white text-sm"
-              >
+              <Link href="/faq" className="block text-gray-300 hover:text-white text-sm">
                 FAQ
               </Link>
               <Link
@@ -109,9 +98,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-primary" />
-                <span className="text-sm text-gray-300">
-                  info@jewelrystore.com
-                </span>
+                <span className="text-sm text-gray-300">info@jewelrystore.com</span>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="h-4 w-4 text-primary mt-1" />

@@ -4,10 +4,7 @@ import { SearchInput } from '@/components/SearchInput';
 import { PriceRangeInputs } from '@/components/PriceRangeInputs';
 import { ProductsList } from '@/components/ProductsList';
 import { createClient } from '@/lib/supabase-server';
-import {
-  getCategoryIdBySlug,
-  getSubcategoriesByParent,
-} from '@/lib/category-utils';
+import { getCategoryIdBySlug, getSubcategoriesByParent } from '@/lib/category-utils';
 import { Product } from '@/types';
 import { Suspense } from 'react';
 
@@ -123,9 +120,7 @@ export default async function CategoryPage({
     awaitedSearchParams
   );
 
-  const activeFilters = Object.entries(awaitedSearchParams).filter(
-    ([, value]) => value
-  );
+  const activeFilters = Object.entries(awaitedSearchParams).filter(([, value]) => value);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -155,9 +150,7 @@ export default async function CategoryPage({
 
           <div className="space-y-4">
             <h3 className="font-semibold">Sort By</h3>
-            <SortSelectWithLoading
-              defaultValue={awaitedSearchParams.sort || 'newest'}
-            />
+            <SortSelectWithLoading defaultValue={awaitedSearchParams.sort || 'newest'} />
           </div>
 
           {/* Active Filters */}
@@ -166,11 +159,7 @@ export default async function CategoryPage({
               <h3 className="font-semibold">Active Filters</h3>
               <div className="flex flex-wrap gap-2">
                 {activeFilters.map(([key, value]) => (
-                  <Badge
-                    key={key}
-                    variant="secondary"
-                    className="cursor-pointer"
-                  >
+                  <Badge key={key} variant="secondary" className="cursor-pointer">
                     {key}: {value}
                     <button className="ml-2 hover:text-destructive">×</button>
                   </Badge>

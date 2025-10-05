@@ -9,9 +9,7 @@ interface NewArrivalsPageProps {
   };
 }
 
-export default async function NewArrivalsPage({
-  searchParams,
-}: NewArrivalsPageProps) {
+export default async function NewArrivalsPage({ searchParams }: NewArrivalsPageProps) {
   return (
     <CategoryPage
       categorySlug="new-arrivals"

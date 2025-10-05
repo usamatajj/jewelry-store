@@ -9,9 +9,7 @@ interface NosePinsPageProps {
   };
 }
 
-export default async function NosePinsPage({
-  searchParams,
-}: NosePinsPageProps) {
+export default async function NosePinsPage({ searchParams }: NosePinsPageProps) {
   return (
     <CategoryPage
       categorySlug="nose-pins"

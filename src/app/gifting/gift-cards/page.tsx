@@ -9,9 +9,7 @@ interface GiftCardsPageProps {
   };
 }
 
-export default async function GiftCardsPage({
-  searchParams,
-}: GiftCardsPageProps) {
+export default async function GiftCardsPage({ searchParams }: GiftCardsPageProps) {
   return (
     <CategoryPage
       categorySlug="gift-cards"

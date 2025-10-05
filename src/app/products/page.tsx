@@ -101,18 +101,14 @@ async function getCategories() {
   return categories as Category[];
 }
 
-export default async function ProductsPage({
-  searchParams,
-}: ProductsPageProps) {
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const awaitedSearchParams = await searchParams;
   const [products, categories] = await Promise.all([
     getProducts(searchParams),
     getCategories(),
   ]);
 
-  const activeFilters = Object.entries(awaitedSearchParams).filter(
-    ([_, value]) => value
-  );
+  const activeFilters = Object.entries(awaitedSearchParams).filter(([_, value]) => value);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -192,11 +188,7 @@ export default async function ProductsPage({
               <h3 className="font-semibold">Active Filters</h3>
               <div className="flex flex-wrap gap-2">
                 {activeFilters.map(([key, value]) => (
-                  <Badge
-                    key={key}
-                    variant="secondary"
-                    className="cursor-pointer"
-                  >
+                  <Badge key={key} variant="secondary" className="cursor-pointer">
                     {key}: {value}
                     <button className="ml-2 hover:text-destructive">×</button>
                   </Badge>

@@ -9,9 +9,7 @@ interface BirthstonePageProps {
   };
 }
 
-export default async function BirthstonePage({
-  searchParams,
-}: BirthstonePageProps) {
+export default async function BirthstonePage({ searchParams }: BirthstonePageProps) {
   return (
     <CategoryPage
       categorySlug="birthstone"
