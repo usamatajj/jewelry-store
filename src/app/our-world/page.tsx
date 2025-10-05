@@ -1,12 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heart, Leaf, Users, Mail } from 'lucide-react';
 
 export default function OurWorldPage() {
@@ -69,11 +62,11 @@ export default function OurWorldPage() {
       <div className="bg-gray-50 rounded-lg p-8 text-center">
         <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
         <p className="text-gray-600 max-w-3xl mx-auto">
-          We believe that jewelry is more than just an accessory – it's a way to express
-          your unique style, celebrate special moments, and create lasting memories. Our
-          mission is to create beautiful, high-quality jewelry that you'll treasure for
-          years to come, while maintaining the highest standards of craftsmanship and
-          ethical sourcing.
+          We believe that jewelry is more than just an accessory – it&apos;s a way to
+          express your unique style, celebrate special moments, and create lasting
+          memories. Our mission is to create beautiful, high-quality jewelry that
+          you&apos;ll treasure for years to come, while maintaining the highest standards
+          of craftsmanship and ethical sourcing.
         </p>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import { NavigationItem } from '@/types';
 import {
-  mainCategories,
   womenCategories,
   menCategories,
   coupleCategories,

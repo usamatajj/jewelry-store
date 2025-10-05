@@ -9,8 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Search, Filter, Grid, List } from 'lucide-react';
+import { Search, Grid, List } from 'lucide-react';
 import { createClient } from '@/lib/supabase-server';
 import { Product, Category } from '@/types';
 import { getCategoryIdBySlug, getSubcategoriesByParent } from '@/lib/category-utils';

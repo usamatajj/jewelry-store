@@ -2,23 +2,13 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import {
-  ShoppingCart,
-  Heart,
-  Share2,
-  Truck,
-  Shield,
-  RotateCcw,
-  Star,
-  ArrowLeft,
-} from 'lucide-react';
+import { Heart, Share2, Truck, Shield, RotateCcw, Star } from 'lucide-react';
 import { createClient } from '@/lib/supabase-server';
 import { ProductCard } from '@/components/ProductCard';
 import { AddToCartButton } from '@/components/AddToCartButton';
-import { Product } from '@/types';
+import { Category, Product } from '@/types';
 
 interface ProductPageProps {
   params: {
@@ -44,7 +34,7 @@ async function getProduct(slug: string) {
     return null;
   }
 
-  return product as Product & { category: any };
+  return product as Product & { category: Category };
 }
 
 async function getRelatedProducts(categoryId: string, productId: string) {
@@ -67,7 +57,7 @@ async function getRelatedProducts(categoryId: string, productId: string) {
     return [];
   }
 
-  return products as (Product & { category: any })[];
+  return products as (Product & { category: Category })[];
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {

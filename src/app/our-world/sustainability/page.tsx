@@ -20,9 +20,9 @@ export default function SustainabilityPage() {
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-6">Our Commitment</h2>
         <p className="text-gray-600 mb-6 max-w-3xl">
-          We believe that beautiful jewelry should also be responsible jewelry. That's why
-          we're committed to sustainable practices throughout our entire supply chain,
-          from sourcing to packaging.
+          We believe that beautiful jewelry should also be responsible jewelry.
+          That&apos;s why we&apos;re committed to sustainable practices throughout our
+          entire supply chain, from sourcing to packaging.
         </p>
       </div>
 

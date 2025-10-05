@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Search, Filter, Grid, List } from 'lucide-react';
+import { Search, Grid, List } from 'lucide-react';
 import { createClient } from '@/lib/supabase-server';
 import { Product, Category } from '@/types';
 import { getCategoryIdBySlug } from '@/lib/category-utils';
@@ -108,7 +108,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     getCategories(),
   ]);
 
-  const activeFilters = Object.entries(awaitedSearchParams).filter(([_, value]) => value);
+  const activeFilters = Object.entries(awaitedSearchParams).filter(([, value]) => value);
 
   return (
     <div className="container mx-auto px-4 py-8">

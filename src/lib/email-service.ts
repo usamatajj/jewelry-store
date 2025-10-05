@@ -21,7 +21,7 @@ interface OrderConfirmationData {
 
 export async function sendOrderConfirmationEmail(orderData: OrderConfirmationData) {
   try {
-    const supabase = await createClient();
+    await createClient();
 
     // Create the HTML content for the email
     const htmlContent = createOrderConfirmationHTML(orderData);

@@ -62,7 +62,7 @@ export default function SignUpPage() {
         // User needs to confirm email
         setSuccess(true);
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);
@@ -86,8 +86,8 @@ export default function SignUpPage() {
             <CardContent>
               <Alert>
                 <AlertDescription>
-                  We've sent you a confirmation link. Please check your email and click
-                  the link to complete your registration.
+                  We&apos;ve sent you a confirmation link. Please check your email and
+                  click the link to complete your registration.
                 </AlertDescription>
               </Alert>
               <div className="mt-6 text-center">

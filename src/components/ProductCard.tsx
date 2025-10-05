@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Heart, Eye } from 'lucide-react';
+import { ShoppingCart, Heart } from 'lucide-react';
 import { Product } from '@/types';
 import { useCart } from '@/contexts/CartContext';
 

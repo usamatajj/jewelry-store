@@ -54,8 +54,8 @@ export default function CareersPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">
-                Be part of creating jewelry that celebrates life's most precious moments
-                and memories.
+                Be part of creating jewelry that celebrates life&apos;s most precious
+                moments and memories.
               </p>
             </CardContent>
           </Card>
@@ -72,8 +72,9 @@ export default function CareersPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600 mb-4">
-                We're looking for a creative jewelry designer to join our design team.
-                You'll work on creating new collections and custom pieces for our clients.
+                We&apos;re looking for a creative jewelry designer to join our design
+                team. You&apos;ll work on creating new collections and custom pieces for
+                our clients.
               </p>
               <Button variant="outline">Apply Now</Button>
             </CardContent>
@@ -101,7 +102,7 @@ export default function CareersPage() {
             <CardContent>
               <p className="text-gray-600 mb-4">
                 We need a skilled jeweler to handle repairs, resizing, and maintenance of
-                our customers' precious pieces.
+                our customers&apos; precious pieces.
               </p>
               <Button variant="outline">Apply Now</Button>
             </CardContent>
@@ -110,10 +111,10 @@ export default function CareersPage() {
       </div>
 
       <div className="bg-gray-50 rounded-lg p-8 text-center">
-        <h2 className="text-2xl font-bold mb-4">Don't See Your Role?</h2>
+        <h2 className="text-2xl font-bold mb-4">Don&apos;t See Your Role?</h2>
         <p className="text-gray-600 mb-6">
-          We're always looking for talented individuals to join our team. Send us your
-          resume and let us know how you'd like to contribute.
+          We&apos;re always looking for talented individuals to join our team. Send us
+          your resume and let us know how you&apos;d like to contribute.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button>

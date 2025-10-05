@@ -2,8 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Sparkles, Heart, Shield, Truck } from 'lucide-react';
+import { ArrowRight, Heart, Shield, Truck } from 'lucide-react';
 import HeroCarousel from '@/components/HeroCarousel';
 
 export default function Home() {

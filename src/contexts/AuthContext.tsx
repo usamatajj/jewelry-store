@@ -34,6 +34,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     getInitialSession();
 
+    const fetchUserProfile = async (userId: string) => {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        if (error) {
+          console.error('Error fetching user profile:', error);
+
+          // If user doesn't exist in public.users, create them
+          if (error.code === 'PGRST116') {
+            console.log('User not found in public.users, creating...');
+            const { data: authUser } = await supabase.auth.getUser();
+
+            if (authUser.user) {
+              const { data: newUser, error: createError } = await supabase
+                .from('users')
+                .insert({
+                  id: userId,
+                  email: authUser.user.email || '',
+                  role: 'customer',
+                })
+                .select()
+                .single();
+
+              if (createError) {
+                console.error('Error creating user:', createError);
+              } else {
+                console.log('User created successfully:', newUser);
+                setUser(newUser);
+              }
+            }
+          }
+          return;
+        }
+
+        setUser(data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
     // Listen for auth changes
     const {
       data: { subscription },
@@ -47,51 +91,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const fetchUserProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user profile:', error);
-
-        // If user doesn't exist in public.users, create them
-        if (error.code === 'PGRST116') {
-          console.log('User not found in public.users, creating...');
-          const { data: authUser } = await supabase.auth.getUser();
-
-          if (authUser.user) {
-            const { data: newUser, error: createError } = await supabase
-              .from('users')
-              .insert({
-                id: userId,
-                email: authUser.user.email || '',
-                role: 'customer',
-              })
-              .select()
-              .single();
-
-            if (createError) {
-              console.error('Error creating user:', createError);
-            } else {
-              console.log('User created successfully:', newUser);
-              setUser(newUser);
-            }
-          }
-        }
-        return;
-      }
-
-      setUser(data);
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-    }
-  };
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({

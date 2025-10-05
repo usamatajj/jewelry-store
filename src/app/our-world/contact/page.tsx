@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -17,7 +11,7 @@ export default function ContactPage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
         <p className="text-xl text-gray-600">
-          We'd love to hear from you. Get in touch with any questions or feedback.
+          We&apos;d love to hear from you. Get in touch with any questions or feedback.
         </p>
       </div>
 
@@ -109,7 +103,7 @@ export default function ContactPage() {
               <p className="text-gray-600">
                 hello@jewelrystore.com
                 <br />
-                We'll respond within 24 hours
+                We&apos;ll respond within 24 hours
               </p>
             </CardContent>
           </Card>

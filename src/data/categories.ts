@@ -1,5 +1,4 @@
 import {
-  Category,
   MainCategorySlug,
   WomenCategorySlug,
   MenCategorySlug,

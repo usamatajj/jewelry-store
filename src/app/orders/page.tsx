@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Package, Calendar, MapPin, CreditCard } from 'lucide-react';
+import { Package, Calendar, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 
 interface Order {
@@ -29,13 +29,7 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      fetchOrders();
-    }
-  }, [user]);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const response = await fetch(`/api/orders?userId=${user?.id}`);
       if (response.ok) {
@@ -47,7 +41,14 @@ export default function OrdersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user) {
+      fetchOrders();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const formatPrice = (price: number) => {
     return `Rs ${price.toLocaleString('en-PK')}`;
