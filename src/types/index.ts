@@ -108,23 +108,23 @@ export interface User {
 }
 
 export interface CheckoutForm {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   address: string;
   city: string;
   state: string;
   zipCode: string;
+  country: string;
+  useDifferentDelivery?: boolean;
   deliveryAddress?: string;
   deliveryCity?: string;
   deliveryState?: string;
   deliveryZipCode?: string;
-  paymentMethod: 'card' | 'upi' | 'netbanking';
-  cardNumber?: string;
-  expiryDate?: string;
-  cvv?: string;
-  upiId?: string;
-  bankName?: string;
+  deliveryCountry?: string;
+  paymentMethod: 'bank_transfer' | 'cash_on_delivery';
+  paymentScreenshot?: File;
 }
 
 export interface NavigationItem {

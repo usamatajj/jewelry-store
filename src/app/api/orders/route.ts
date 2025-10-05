@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
       email,
       first_name,
       last_name,
+      phone,
       address,
       city,
       state,
@@ -24,8 +25,13 @@ export async function POST(request: NextRequest) {
       delivery_country,
       total_amount,
       payment_method,
+      payment_screenshot,
       items, // Array of cart items
     } = orderData;
+
+    // Determine payment status based on payment method
+    const payment_status =
+      payment_method === 'bank_transfer' ? 'pending' : 'pending';
 
     // Create the order
     const { data: order, error: orderError } = await supabase
@@ -47,8 +53,9 @@ export async function POST(request: NextRequest) {
         delivery_country: delivery_country || null,
         total_amount,
         payment_method,
+        payment_screenshot: payment_screenshot || null,
         status: 'pending',
-        payment_status: 'paid', // Assuming payment is successful
+        payment_status,
       })
       .select()
       .single();
@@ -65,6 +72,7 @@ export async function POST(request: NextRequest) {
     const orderItems = items.map((item: any) => ({
       order_id: order.id,
       product_id: item.id,
+      product_name: item.product_name || 'Unknown Product',
       quantity: item.quantity,
       price: item.price,
     }));
@@ -105,9 +113,10 @@ export async function POST(request: NextRequest) {
       (sum: number, item: any) => sum + item.price * item.quantity,
       0
     );
-    const shipping = subtotal > 100 ? 0 : 10; // Free shipping over $100
-    const tax = subtotal * 0.08; // 8% tax
-    const total = subtotal + shipping + tax;
+    const shipping = subtotal >= 5000 ? 0 : 200; // Free shipping above Rs 5000
+    const codCharges = payment_method === 'cash_on_delivery' ? 100 : 0;
+    const tax = 0; // No tax
+    const total = subtotal + shipping + tax + codCharges;
 
     // Prepare shipping address
     const shippingAddress = delivery_address
