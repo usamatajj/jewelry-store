@@ -93,6 +93,11 @@ export interface User {
   email: string;
   role: 'customer' | 'admin';
   created_at: string;
+  user_metadata?: {
+    first_name?: string;
+    last_name?: string;
+    [key: string]: unknown;
+  };
 }
 
 export interface CheckoutForm {
