@@ -16,6 +16,9 @@ import {
   Eye,
   BarChart3,
   Search,
+  CheckCircle,
+  CreditCard,
+  Loader2,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Product, Category } from '@/types';
@@ -33,6 +36,7 @@ interface AdminOrder {
   total_amount: number;
   status: string;
   payment_status: string;
+  payment_method: string;
   created_at: string;
   order_items?: unknown[];
 }
@@ -42,6 +46,341 @@ interface AdminUser {
   email: string;
   role: string;
   created_at: string;
+}
+
+// OrderRow Component
+function OrderRow({ order, onUpdate }: { order: AdminOrder; onUpdate: () => void }) {
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  const handleConfirmOrder = async () => {
+    setIsConfirming(true);
+    try {
+      const response = await fetch(`/api/admin/orders/${order.id}/confirm`, {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Order confirmed successfully! Confirmation email sent to customer.');
+        onUpdate(); // Reload orders
+      } else {
+        alert(`Failed to confirm order: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error confirming order:', error);
+      alert('Failed to confirm order');
+    } finally {
+      setIsConfirming(false);
+    }
+  };
+
+  const handleVerifyPayment = async () => {
+    setIsVerifying(true);
+    try {
+      const response = await fetch(`/api/admin/orders/${order.id}/verify-payment`, {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Payment verified successfully! Verification email sent to customer.');
+        onUpdate(); // Reload orders
+      } else {
+        alert(`Failed to verify payment: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error verifying payment:', error);
+      alert('Failed to verify payment');
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleUpdateStatus = async (newStatus: string) => {
+    setIsUpdatingStatus(true);
+    try {
+      const response = await fetch(`/api/admin/orders/${order.id}/update-status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(`Order status updated to ${newStatus}!`);
+        onUpdate(); // Reload orders
+      } else {
+        alert(`Failed to update status: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
+      alert('Failed to update status');
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'processing':
+        return 'bg-blue-100 text-blue-800';
+      case 'shipped':
+        return 'bg-purple-100 text-purple-800';
+      case 'delivered':
+        return 'bg-green-100 text-green-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getPaymentStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'paid':
+        return 'bg-green-100 text-green-800';
+      case 'failed':
+        return 'bg-red-100 text-red-800';
+      case 'refunded':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  // Helper function to get order status message
+  const getOrderStatusMessage = () => {
+    if (order.payment_method === 'bank_transfer') {
+      if (order.payment_status === 'pending' && order.status === 'pending') {
+        return '⏳ Awaiting payment verification';
+      }
+      if (order.payment_status === 'paid' && order.status === 'pending') {
+        return '✅ Payment verified - Ready to confirm';
+      }
+    }
+    if (order.payment_method === 'cash_on_delivery') {
+      if (order.status === 'pending') {
+        return '📞 COD - Ready to confirm';
+      }
+      if (order.status === 'processing') {
+        return '📦 COD - Being prepared';
+      }
+    }
+    return null;
+  };
+
+  return (
+    <div className="p-4 border rounded-lg hover:bg-gray-50">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <h3 className="font-medium text-lg">#{order.id.slice(0, 8).toUpperCase()}</h3>
+
+            {/* Order Status Badge with label */}
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-gray-500 font-medium">Order:</span>
+              <Badge className={getStatusColor(order.status)}>{order.status}</Badge>
+            </div>
+
+            {/* Payment Status Badge with label */}
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-gray-500 font-medium">Payment:</span>
+              <Badge className={getPaymentStatusColor(order.payment_status)}>
+                {order.payment_status}
+              </Badge>
+            </div>
+
+            {/* Payment Method Badge */}
+            <Badge variant="outline" className="text-xs">
+              {order.payment_method === 'bank_transfer' ? '🏦 Bank Transfer' : '💰 COD'}
+            </Badge>
+          </div>
+
+          {/* Status Message */}
+          {getOrderStatusMessage() && (
+            <div className="mb-2 text-sm font-medium text-blue-600">
+              {getOrderStatusMessage()}
+            </div>
+          )}
+
+          <p className="text-sm text-gray-600">
+            <strong>
+              {order.first_name} {order.last_name}
+            </strong>{' '}
+            - {order.email}
+          </p>
+          <p className="text-sm text-gray-500">
+            {new Date(order.created_at).toLocaleDateString('en-US', {
+              weekday: 'short',
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </p>
+          <p className="text-sm font-medium text-primary mt-1">
+            Rs {order.total_amount.toLocaleString('en-PK')}
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          {/* Confirm Order Button (pending → processing) */}
+          {order.status === 'pending' && (
+            <Button
+              size="sm"
+              onClick={handleConfirmOrder}
+              disabled={isConfirming}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              {isConfirming ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  Confirming...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="h-4 w-4 mr-1" />
+                  Confirm Order
+                </>
+              )}
+            </Button>
+          )}
+
+          {/* Verify Payment Button (for bank transfer with pending payment) */}
+          {order.payment_status === 'pending' &&
+            order.payment_method === 'bank_transfer' && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleVerifyPayment}
+                disabled={isVerifying}
+                className="border-blue-600 text-blue-600 hover:bg-blue-50"
+              >
+                {isVerifying ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                    Verifying...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="h-4 w-4 mr-1" />
+                    Verify Payment
+                  </>
+                )}
+              </Button>
+            )}
+
+          {/* Mark as Shipped Button (processing → shipped) */}
+          {order.status === 'processing' && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleUpdateStatus('shipped')}
+              disabled={isUpdatingStatus}
+              className="border-purple-600 text-purple-600 hover:bg-purple-50"
+            >
+              {isUpdatingStatus ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                <>📦 Mark as Shipped</>
+              )}
+            </Button>
+          )}
+
+          {/* Mark as Delivered Button (shipped → delivered) */}
+          {order.status === 'shipped' && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleUpdateStatus('delivered')}
+              disabled={isUpdatingStatus}
+              className="border-green-600 text-green-600 hover:bg-green-50"
+            >
+              {isUpdatingStatus ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                <>✅ Mark as Delivered</>
+              )}
+            </Button>
+          )}
+
+          {/* Mark Payment as Paid for COD (when delivered) */}
+          {order.status === 'delivered' &&
+            order.payment_status === 'pending' &&
+            order.payment_method === 'cash_on_delivery' && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleVerifyPayment}
+                disabled={isVerifying}
+                className="border-green-600 text-green-600 hover:bg-green-50"
+              >
+                {isVerifying ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                    Marking...
+                  </>
+                ) : (
+                  <>💰 Mark Payment Received</>
+                )}
+              </Button>
+            )}
+
+          {/* Cancel Order Button (only if pending or processing) */}
+          {(order.status === 'pending' || order.status === 'processing') && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                if (
+                  confirm(
+                    'Are you sure you want to cancel this order? This action cannot be undone.'
+                  )
+                ) {
+                  handleUpdateStatus('cancelled');
+                }
+              }}
+              disabled={isUpdatingStatus}
+              className="border-red-600 text-red-600 hover:bg-red-50"
+            >
+              {isUpdatingStatus ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  Cancelling...
+                </>
+              ) : (
+                <>❌ Cancel Order</>
+              )}
+            </Button>
+          )}
+
+          {/* View Details Button */}
+          <Button variant="outline" size="sm">
+            <Eye className="h-4 w-4 mr-1" />
+            Details
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function AdminPage() {
@@ -486,37 +825,7 @@ export default function AdminPage() {
               ) : (
                 <div className="space-y-4">
                   {orders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="p-4 border rounded-lg hover:bg-gray-50"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-medium">Order #{order.id.slice(0, 8)}</h3>
-                          <p className="text-sm text-gray-600">
-                            {order.first_name} {order.last_name} - {order.email}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {new Date(order.created_at).toLocaleDateString()}
-                          </p>
-                          <p className="text-sm font-medium text-primary">
-                            ${order.total_amount}
-                          </p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge
-                            variant={
-                              order.status === 'completed' ? 'default' : 'secondary'
-                            }
-                          >
-                            {order.status}
-                          </Badge>
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
+                    <OrderRow key={order.id} order={order} onUpdate={loadData} />
                   ))}
                 </div>
               )}

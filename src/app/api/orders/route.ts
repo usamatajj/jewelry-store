@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase-server';
-import { sendOrderConfirmationEmail } from '@/lib/email-service';
+import { sendOrderPlacedEmail } from '@/lib/email-supabase';
 
 export async function POST(request: NextRequest) {
   try {
@@ -139,47 +139,54 @@ export async function POST(request: NextRequest) {
     // Calculate estimated delivery (7-10 business days)
     const estimatedDelivery = new Date();
     estimatedDelivery.setDate(estimatedDelivery.getDate() + 10);
-    const estimatedDeliveryStr = estimatedDelivery.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
 
-    // Send confirmation email
-    const emailResult = await sendOrderConfirmationEmail({
+    // Send order placed email
+    console.log('📧 Order created successfully, now sending email...');
+    console.log('📧 Email will be sent to:', email);
+
+    const emailSent = await sendOrderPlacedEmail({
       customerName: `${first_name} ${last_name}`,
-      email,
-      orderNumber: order.id.slice(-8).toUpperCase(),
+      customerEmail: email,
+      orderNumber: order.id.slice(0, 8).toUpperCase(),
       orderDate: new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       }),
-      items: emailItems,
-      subtotal,
-      shippingCost: shipping,
-      tax,
-      total,
+      paymentMethod:
+        payment_method === 'bank_transfer' ? 'Bank Transfer' : 'Cash on Delivery',
+      items: emailItems.map(
+        (item: { name: string; price: number; quantity: number }) => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: `Rs ${item.price.toLocaleString('en-PK')}`,
+        })
+      ),
+      subtotal: `${subtotal.toLocaleString('en-PK')}`,
+      shipping: `${shipping.toLocaleString('en-PK')}`,
+      codCharges: codCharges > 0 ? `${codCharges.toLocaleString('en-PK')}` : undefined,
+      total: `${total.toLocaleString('en-PK')}`,
       shippingAddress,
-      estimatedDelivery: estimatedDeliveryStr,
-      orderTrackingURL: `${
-        process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3002'
-      }/orders/${order.id}`,
+      isBankTransfer: payment_method === 'bank_transfer',
+      freeShipping: shipping === 0,
     });
 
-    if (!emailResult.success) {
-      console.error('Failed to send confirmation email:', emailResult.error);
+    console.log('📧 Email send result:', emailSent ? '✅ Success' : '❌ Failed');
+
+    if (!emailSent) {
+      console.error('❌ Failed to send order placed email');
       // Don't fail the order if email fails, just log it
+    } else {
+      console.log('✅ Order email sent successfully!');
     }
 
     return NextResponse.json({
       success: true,
       order: {
         id: order.id,
-        orderNumber: order.id.slice(-8).toUpperCase(),
-        emailSent: emailResult.success,
+        orderNumber: order.id.slice(0, 8).toUpperCase(),
+        emailSent,
       },
     });
   } catch (error) {

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation</title>
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+          sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 28px;
+      }
+      .content {
+        padding: 30px 20px;
+      }
+      .order-info {
+        background-color: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 15px;
+        margin: 20px 0;
+      }
+      .order-info p {
+        margin: 5px 0;
+      }
+      .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .items-table th {
+        background-color: #f8f9fa;
+        padding: 10px;
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 2px solid #dee2e6;
+      }
+      .items-table td {
+        padding: 10px;
+        border-bottom: 1px solid #dee2e6;
+      }
+      .total-section {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #dee2e6;
+      }
+      .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+      }
+      .total-row.final {
+        font-size: 18px;
+        font-weight: bold;
+        color: #667eea;
+      }
+      .info-box {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196f3;
+        padding: 15px;
+        margin: 20px 0;
+      }
+      .info-box.warning {
+        background-color: #fff3cd;
+        border-left-color: #ffc107;
+      }
+      .footer {
+        background-color: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #667eea;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>✓ Order Received!</h1>
+        <p>Thank you for your order</p>
+      </div>
+
+      <div class="content">
+        <p>Dear {{customerName}},</p>
+        <p>
+          Thank you for your order at Eterna Jewels. We have received your order and will
+          process it shortly.
+        </p>
+
+        <div class="order-info">
+          <p><strong>Order Number:</strong> #{{orderNumber}}</p>
+          <p><strong>Order Date:</strong> {{orderDate}}</p>
+          <p><strong>Payment Method:</strong> {{paymentMethod}}</p>
+        </div>
+
+        <h3>Order Items:</h3>
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th style="text-align: right">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each items}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td>{{this.quantity}}</td>
+              <td style="text-align: right">Rs {{this.price}}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+
+        <div class="total-section">
+          <div class="total-row">
+            <span>Subtotal:</span>
+            <span>Rs {{subtotal}}</span>
+          </div>
+          <div class="total-row">
+            <span>Shipping:</span>
+            <span>{{#if freeShipping}}Free{{else}}Rs {{shipping}}{{/if}}</span>
+          </div>
+          {{#if codCharges}}
+          <div class="total-row">
+            <span>COD Charges:</span>
+            <span>Rs {{codCharges}}</span>
+          </div>
+          {{/if}}
+          <div class="total-row final">
+            <span>Total:</span>
+            <span>Rs {{total}}</span>
+          </div>
+        </div>
+
+        {{#if isBankTransfer}}
+        <div class="info-box">
+          <p><strong>Payment Verification:</strong></p>
+          <p>
+            We will verify your payment within 24 hours. Once verified, your order will be
+            confirmed and prepared for shipment.
+          </p>
+        </div>
+        {{else}}
+        <div class="info-box warning">
+          <p><strong>Cash on Delivery:</strong></p>
+          <p>
+            Please keep exact cash ready for delivery. Our team may contact you to confirm
+            the order.
+          </p>
+        </div>
+        {{/if}}
+
+        <h3>Delivery Address:</h3>
+        <p>{{shippingAddress}}</p>
+
+        <div class="info-box">
+          <p><strong>What's Next?</strong></p>
+          <ul style="margin: 10px 0; padding-left: 20px">
+            <li>You will receive an email once your order is confirmed</li>
+            <li>You will receive tracking information once shipped</li>
+            <li>Expected delivery: 3-5 business days</li>
+          </ul>
+        </div>
+
+        <p style="margin-top: 30px">
+          If you have any questions, please contact us at
+          <a href="mailto:support@eternajewels.com">support@eternajewels.com</a>
+        </p>
+      </div>
+
+      <div class="footer">
+        <p>© 2025 Eterna Jewels. All rights reserved.</p>
+        <p>This email was sent to {{customerEmail}}</p>
+      </div>
+    </div>
+  </body>
+</html>
