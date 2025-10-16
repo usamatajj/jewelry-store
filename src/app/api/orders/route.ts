@@ -116,9 +116,19 @@ export async function POST(request: NextRequest) {
         sum + item.price * item.quantity,
       0
     );
-    const shipping = subtotal >= 5000 ? 0 : 200; // Free shipping above Rs 5000
-    const codCharges = payment_method === 'cash_on_delivery' ? 100 : 0;
-    const tax = 0; // No tax
+
+    // Shipping logic: Free above Rs 5000 for bank transfer, always Rs 200 for COD
+    const shipping =
+      payment_method === 'cash_on_delivery'
+        ? 200 // COD always pays shipping
+        : subtotal >= 5000
+          ? 0 // Bank transfer gets free shipping above Rs 5000
+          : 200;
+
+    // COD charges: 4% tax + 0.5% handling + Rs 100 base fee
+    const codCharges = payment_method === 'cash_on_delivery' ? subtotal * 0.045 + 100 : 0;
+
+    const tax = 0; // No tax for bank transfer
     const total = subtotal + shipping + tax + codCharges;
 
     // Prepare shipping address

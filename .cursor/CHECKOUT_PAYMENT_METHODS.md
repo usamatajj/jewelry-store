@@ -15,10 +15,32 @@ The checkout system has been updated to support Pakistani payment methods with p
 
 ### 2. Cash on Delivery (COD)
 
-- Additional Rs 100 charges
+#### COD Charges Breakdown:
+- **4% Tax** (in accordance with Budget 2025)
+- **0.5% Cash Handling Charges**
+- **Rs 100 Base Fee**
+- **Rs 200 Shipping** (always, no free shipping for COD)
+
+#### Formula:
+```
+Total COD Charges = (Subtotal × 4.5%) + Rs 100
+Shipping = Rs 200 (always for COD)
+```
+
+#### Example:
+For an Rs 8,000 order:
+- COD Charges: (8000 × 0.045) + 100 = Rs 460
+- Shipping: Rs 200
+- Total Additional: Rs 660
+- Order Total: Rs 8,660
+
+#### Key Points:
 - Payment status: `pending` until delivery
 - No screenshot required
-- Terms and conditions displayed
+- No maximum order limit
+- COD available for all order amounts
+- Terms and conditions displayed at checkout
+- Team may request small advance to ensure delivery
 
 ## 🗄️ Database Schema
 
@@ -119,13 +141,106 @@ IBAN: PK12HABB1234567890123456
 
 ## 💰 Pricing Logic
 
+### Current Implementation:
+
 ```typescript
+// Calculate subtotal
 subtotal = items.reduce((sum, item) => sum + price * quantity, 0);
-shipping = subtotal >= 5000 ? 0 : 200;
-codCharges = paymentMethod === 'cash_on_delivery' ? 100 : 0;
+
+// Shipping logic: Free above Rs 5000 for bank transfer, always Rs 200 for COD
+shipping = paymentMethod === 'cash_on_delivery'
+  ? 200  // COD always pays shipping
+  : subtotal >= 5000
+    ? 0   // Bank transfer gets free shipping above Rs 5000
+    : 200;
+
+// COD charges: 4% tax + 0.5% handling + Rs 100 base
+codCharges = paymentMethod === 'cash_on_delivery' 
+  ? subtotal * 0.045 + 100 
+  : 0;
+
+// Tax (currently 0 for bank transfer)
 tax = 0;
+
+// Calculate total
 total = subtotal + shipping + tax + codCharges;
 ```
+
+## 📦 Shipping Policy
+
+### Bank Transfer:
+- ✅ **Free shipping** on orders above Rs 5,000
+- 💰 Rs 200 shipping for orders below Rs 5,000
+
+### Cash on Delivery (COD):
+- 💰 **Always Rs 200 shipping** (no free shipping for COD)
+- This is in addition to COD charges (4.5% + Rs 100)
+
+### Rationale:
+COD orders involve additional operational costs:
+- Cash handling at delivery
+- Higher delivery risk
+- Potential return shipping costs
+- Payment verification delays
+
+Therefore, free shipping is only available for bank transfer orders above Rs 5,000.
+
+## 💵 Pricing Examples
+
+### Example 1: Small Order (Rs 3,000)
+
+**Bank Transfer:**
+- Subtotal: Rs 3,000
+- Shipping: Rs 200
+- COD Charges: Rs 0
+- **Total: Rs 3,200**
+
+**Cash on Delivery:**
+- Subtotal: Rs 3,000
+- Shipping: Rs 200
+- COD Charges: Rs 235 (3000 × 0.045 + 100)
+- **Total: Rs 3,435**
+
+### Example 2: Medium Order (Rs 8,000)
+
+**Bank Transfer:**
+- Subtotal: Rs 8,000
+- Shipping: Rs 0 (free above Rs 5,000)
+- COD Charges: Rs 0
+- **Total: Rs 8,000**
+
+**Cash on Delivery:**
+- Subtotal: Rs 8,000
+- Shipping: Rs 200 (COD always pays)
+- COD Charges: Rs 460 (8000 × 0.045 + 100)
+- **Total: Rs 8,660**
+- **Difference: Rs 660 more than bank transfer**
+
+### Example 3: Large Order (Rs 15,000)
+
+**Bank Transfer:**
+- Subtotal: Rs 15,000
+- Shipping: Rs 0 (free above Rs 5,000)
+- COD Charges: Rs 0
+- **Total: Rs 15,000**
+
+**Cash on Delivery:**
+- Subtotal: Rs 15,000
+- Shipping: Rs 200 (COD always pays)
+- COD Charges: Rs 775 (15000 × 0.045 + 100)
+- **Total: Rs 15,975**
+- **Difference: Rs 975 more than bank transfer**
+
+### Summary Table:
+
+| Order Amount | Bank Transfer | COD Total | Additional COD Cost |
+|--------------|---------------|-----------|---------------------|
+| Rs 3,000 | Rs 3,200 | Rs 3,435 | +Rs 235 |
+| Rs 5,000 | Rs 5,200 | Rs 5,525 | +Rs 325 |
+| Rs 8,000 | Rs 8,000 | Rs 8,660 | +Rs 660 |
+| Rs 10,000 | Rs 10,000 | Rs 10,750 | +Rs 750 |
+| Rs 15,000 | Rs 15,000 | Rs 15,975 | +Rs 975 |
+| Rs 50,000 | Rs 50,000 | Rs 52,550 | +Rs 2,550 |
 
 ## 📧 Email Confirmation
 
@@ -210,18 +325,35 @@ Pending → Paid (COD after delivery)
 
 ## 🔍 Testing Checklist
 
-- [ ] Bank transfer with screenshot
+### Bank Transfer Tests:
+- [ ] Bank transfer with screenshot (should succeed)
 - [ ] Bank transfer without screenshot (should fail)
-- [ ] COD with Rs 100 charges
-- [ ] Separate delivery address
-- [ ] Same delivery address
-- [ ] Free shipping above Rs 5000
-- [ ] Paid shipping below Rs 5000
+- [ ] Order below Rs 5,000 with Rs 200 shipping
+- [ ] Order above Rs 5,000 with free shipping
+- [ ] Screenshot uploaded to storage correctly
+- [ ] Payment status set to 'pending'
+
+### COD Tests:
+- [ ] COD order below Rs 5,000 (Rs 200 shipping + COD charges)
+- [ ] COD order above Rs 5,000 (Rs 200 shipping + COD charges, NO free shipping)
+- [ ] COD charges calculated correctly (subtotal × 4.5% + Rs 100)
+- [ ] Payment status set to 'pending'
+- [ ] COD terms displayed at checkout
+
+### General Tests:
+- [ ] Separate delivery address works
+- [ ] Same delivery address (billing = delivery)
 - [ ] Email confirmation sent
-- [ ] Screenshot uploaded to storage
 - [ ] Order created in database
 - [ ] Order items created
 - [ ] Success page displayed
+- [ ] Cart cleared after order
+
+### Edge Cases:
+- [ ] COD order exactly Rs 5,000 (should pay shipping)
+- [ ] COD order Rs 10,000+ (should still pay shipping)
+- [ ] Guest checkout works
+- [ ] Logged-in user checkout works
 
 ## 📱 Mobile Considerations
 
@@ -251,10 +383,10 @@ Pending → Paid (COD after delivery)
 
 ## 📚 Related Files
 
-- `COMPLETE_SETUP_STEPS.md` - Setup guide
-- `PAYMENT_SCREENSHOT_STORAGE_SETUP.md` - Storage details
-- `CHECKOUT_UPDATE_SUMMARY.md` - Feature summary
-- `QUICK_SETUP_REFERENCE.md` - Quick start
+- `PAYMENT_SCREENSHOT_STORAGE_SETUP.md` - Storage setup details
+- `QUICK_SETUP_REFERENCE.md` - Quick start guide
+- `src/app/checkout/page.tsx` - Checkout implementation
+- `src/app/api/orders/route.ts` - Order API
 
 ## 🆘 Common Issues
 
@@ -279,8 +411,27 @@ Set up storage RLS policies
 - Verify user authentication
 - Check RLS policies on orders table
 
+## 📝 Changelog
+
+### Version 2.1 (October 2025)
+- ✅ Updated shipping policy: COD orders always pay Rs 200 shipping
+- ✅ Free shipping only for bank transfer orders above Rs 5,000
+- ✅ Added comprehensive pricing examples
+- ✅ Updated all documentation to reflect shipping changes
+
+### Version 2.0 (October 2025)
+- ✅ Removed COD limit: COD available for all order amounts
+- ✅ Added COD policy banner at checkout
+- ✅ Simplified user experience
+
+### Version 1.0 (October 2025)
+- ✅ Initial implementation
+- ✅ Bank transfer with screenshot upload
+- ✅ COD with 4.5% + Rs 100 charges
+- ✅ Guest checkout support
+
 ---
 
-**Last Updated**: October 4, 2025  
+**Last Updated**: October 16, 2025  
 **Maintained by**: Development Team  
-**Status**: Production Ready
+**Status**: Production Ready ✅

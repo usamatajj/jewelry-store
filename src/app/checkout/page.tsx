@@ -159,9 +159,20 @@ export default function CheckoutPage() {
         (sum, item) => sum + item.product.price * item.quantity,
         0
       );
-      const shipping = subtotal >= 5000 ? 0 : 200; // Free shipping above Rs 5000
-      const codCharges = data.paymentMethod === 'cash_on_delivery' ? 100 : 0;
-      const tax = 0; // No tax for now
+
+      // Shipping logic: Free above Rs 5000 for bank transfer, always Rs 200 for COD
+      const shipping =
+        data.paymentMethod === 'cash_on_delivery'
+          ? 200 // COD always pays shipping
+          : subtotal >= 5000
+            ? 0 // Bank transfer gets free shipping above Rs 5000
+            : 200;
+
+      // COD charges: 4% tax + 0.5% handling + Rs 100 base
+      const codCharges =
+        data.paymentMethod === 'cash_on_delivery' ? subtotal * 0.045 + 100 : 0;
+
+      const tax = 0; // No tax for bank transfer
       const total = subtotal + shipping + tax + codCharges;
 
       let paymentScreenshotUrl = null;
@@ -349,8 +360,18 @@ export default function CheckoutPage() {
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
-  const shipping = subtotal >= 5000 ? 0 : 200;
-  const codCharges = paymentMethod === 'cash_on_delivery' ? 100 : 0;
+
+  // Shipping logic: Free above Rs 5000 for bank transfer, always Rs 200 for COD
+  const shipping =
+    paymentMethod === 'cash_on_delivery'
+      ? 200 // COD always pays shipping
+      : subtotal >= 5000
+        ? 0 // Bank transfer gets free shipping above Rs 5000
+        : 200;
+
+  // COD charges: 4% tax + 0.5% handling + Rs 100 base
+  const codCharges = paymentMethod === 'cash_on_delivery' ? subtotal * 0.045 + 100 : 0;
+
   const tax = 0;
   const total = subtotal + shipping + tax + codCharges;
 
@@ -604,6 +625,29 @@ export default function CheckoutPage() {
                 <CardTitle>Payment Method</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* COD Policy Information Banner */}
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-start space-x-2">
+                    <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-yellow-900">
+                      <p className="font-semibold mb-2">Cash on Delivery Policy:</p>
+                      <div className="space-y-1.5">
+                        <p>
+                          • Cash on delivery is subject to <strong>4% Tax</strong> (in
+                          accordance with budget 2025) +{' '}
+                          <strong>0.5% cash handling charges</strong> +{' '}
+                          <strong>Rs 100 base fee</strong>.
+                        </p>
+                        <p>
+                          • To confirm your COD order, our team may request a small
+                          advance to ensure delivery and avoid return shipping fees. This
+                          amount will be adjusted in your total order value.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <RadioGroup
                   value={paymentMethod}
                   onValueChange={(value: string) =>
@@ -712,7 +756,7 @@ export default function CheckoutPage() {
                         <Wallet className="h-5 w-5 mr-2" />
                         <span className="font-semibold">Cash on Delivery</span>
                         <Badge variant="secondary" className="ml-2">
-                          + Rs 100
+                          + 4.5%
                         </Badge>
                       </Label>
                       <p className="text-sm text-gray-600 mt-1">
@@ -720,15 +764,14 @@ export default function CheckoutPage() {
                       </p>
 
                       {paymentMethod === 'cash_on_delivery' && (
-                        <div className="mt-4 p-4 bg-yellow-50 rounded-lg flex items-start space-x-2">
-                          <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                          <div className="text-sm text-yellow-800">
-                            <p className="font-semibold mb-1">Please Note:</p>
-                            <ul className="list-disc list-inside space-y-1">
-                              <li>Additional Rs 100 COD charges apply</li>
-                              <li>Please keep exact cash ready</li>
-                              <li>Available for orders within Pakistan only</li>
-                            </ul>
+                        <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                          <div className="text-sm text-green-800">
+                            <p className="font-semibold mb-1">✓ COD Available</p>
+                            <p>
+                              You can pay with cash when your order arrives. Additional
+                              charges of {formatPrice(subtotal * 0.045 + 100)} will be
+                              added to your total.
+                            </p>
                           </div>
                         </div>
                       )}
@@ -790,8 +833,13 @@ export default function CheckoutPage() {
                     </span>
                   </div>
                   {codCharges > 0 && (
-                    <div className="flex justify-between">
-                      <span>COD Charges</span>
+                    <div className="flex justify-between text-yellow-700">
+                      <span>
+                        COD Charges
+                        <span className="text-xs block text-gray-500">
+                          (4% tax + 0.5% handling + Rs 100)
+                        </span>
+                      </span>
                       <span>{formatPrice(codCharges)}</span>
                     </div>
                   )}
@@ -808,7 +856,11 @@ export default function CheckoutPage() {
                 <div className="bg-green-50 p-3 rounded-lg">
                   <div className="flex items-center space-x-2 text-sm text-green-700">
                     <Truck className="h-4 w-4" />
-                    <span>Free shipping on orders above Rs 5,000</span>
+                    <span>
+                      {paymentMethod === 'cash_on_delivery'
+                        ? 'Shipping: Rs 200 (COD orders)'
+                        : 'Free shipping on orders above Rs 5,000'}
+                    </span>
                   </div>
                 </div>
 
