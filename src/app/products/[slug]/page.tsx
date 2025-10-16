@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Heart, Share2, Truck, Shield, RotateCcw, Star } from 'lucide-react';
+import { Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
 import { createClient } from '@/lib/supabase-server';
 import { ProductCard } from '@/components/ProductCard';
 import { AddToCartButton } from '@/components/AddToCartButton';
+import { BuyNowButton } from '@/components/BuyNowButton';
 import { Category, Product } from '@/types';
 
 interface ProductPageProps {
@@ -97,7 +98,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        {/* Product Images */}
+        {/* Left Column - Product Images */}
         <div className="space-y-4">
           <div className="aspect-square relative overflow-hidden rounded-lg">
             <Image
@@ -134,100 +135,65 @@ export default async function ProductPage({ params }: ProductPageProps) {
           )}
         </div>
 
-        {/* Product Details */}
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="flex items-center space-x-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                ))}
-                <span className="text-sm text-gray-600 ml-2">(4.8) 124 reviews</span>
-              </div>
+        {/* Right Column - Product Details */}
+        <div className="flex flex-col justify-between h-[78%]">
+          {/* Top Section - Product Info */}
+
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+              <p className="text-3xl font-bold text-primary mb-4">
+                {formatPrice(product.price)}
+              </p>
             </div>
-            <p className="text-3xl font-bold text-primary mb-4">
-              {formatPrice(product.price)}
-            </p>
-          </div>
 
-          <Separator />
+            <Separator />
 
-          <div>
-            <h3 className="font-semibold mb-2">Description</h3>
-            <p className="text-gray-600 leading-relaxed">{product.description}</p>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="font-semibold">Features</h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                <span>Premium quality materials</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                <span>Handcrafted with attention to detail</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                <span>Comes with elegant gift box</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                <span>Lifetime warranty included</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="font-semibold">Quantity</h3>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center border rounded-lg">
-                <Button variant="ghost" size="icon" className="h-10 w-10">
-                  -
-                </Button>
-                <span className="px-4 py-2 min-w-[3rem] text-center">1</span>
-                <Button variant="ghost" size="icon" className="h-10 w-10">
-                  +
-                </Button>
-              </div>
+            <div>
+              <h3 className="font-semibold mb-2">Description</h3>
+              <p className="text-gray-600 leading-relaxed overflow-y-auto">
+                {product.description}
+              </p>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <AddToCartButton product={product} className="flex-1" />
-            <Button variant="outline" size="icon" className="h-12 w-12">
-              <Heart className="h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="icon" className="h-12 w-12">
-              <Share2 className="h-5 w-5" />
-            </Button>
-          </div>
-
-          <Separator />
-
-          {/* Features */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="flex items-center space-x-3">
-              <Truck className="h-5 w-5 text-primary" />
-              <div>
-                <p className="font-medium text-sm">Free Shipping</p>
-                <p className="text-xs text-gray-600">On orders over $100</p>
-              </div>
+          {/* Bottom Section - Action Buttons & Store Features */}
+          <div className="space-y-4 mt-20">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <AddToCartButton product={product} className="flex-1 h-12" />
+              <BuyNowButton product={product} className="flex-1 h-12" />
+              <Button variant="outline" size="icon" className="h-12 w-12">
+                <Heart className="h-5 w-5" />
+              </Button>
+              <Button variant="outline" size="icon" className="h-12 w-12">
+                <Share2 className="h-5 w-5" />
+              </Button>
             </div>
-            <div className="flex items-center space-x-3">
-              <Shield className="h-5 w-5 text-primary" />
-              <div>
-                <p className="font-medium text-sm">Secure Payment</p>
-                <p className="text-xs text-gray-600">100% secure checkout</p>
+
+            <Separator />
+
+            {/* Store Features */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="flex items-center space-x-3">
+                <Truck className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-medium text-sm">Free Shipping</p>
+                  <p className="text-xs text-gray-600">On orders over Rs 5,000</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <RotateCcw className="h-5 w-5 text-primary" />
-              <div>
-                <p className="font-medium text-sm">Easy Returns</p>
-                <p className="text-xs text-gray-600">30-day return policy</p>
+              <div className="flex items-center space-x-3">
+                <Shield className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-medium text-sm">Secure Payment</p>
+                  <p className="text-xs text-gray-600">100% secure checkout</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <RotateCcw className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="font-medium text-sm">Easy Returns</p>
+                  <p className="text-xs text-gray-600">30-day return policy</p>
+                </div>
               </div>
             </div>
           </div>

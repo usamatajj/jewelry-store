@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -22,6 +23,7 @@ import {
   Truck,
   CheckCircle,
   AlertCircle,
+  ShieldAlert,
 } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -91,10 +93,19 @@ const checkoutSchema = z
 export default function CheckoutPage() {
   const { state, clearCart } = useCart();
   const { user } = useAuth(); // User can be null for guest checkout
+  const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
   const [paymentFile, setPaymentFile] = useState<File | null>(null);
+
+  // Redirect admins away from checkout page
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      router.push('/admin');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const {
     register,
@@ -292,6 +303,26 @@ export default function CheckoutPage() {
               <Button>Continue Shopping</Button>
             </Link>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Block admin access
+  if (user?.role === 'admin') {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-md mx-auto text-center">
+          <ShieldAlert className="h-24 w-24 text-red-500 mx-auto mb-6" />
+          <h1 className="text-2xl font-bold mb-4">Access Restricted</h1>
+          <p className="text-gray-600 mb-8">
+            Admin accounts cannot make purchases. Please use a customer account.
+          </p>
+          <Link href="/admin">
+            <Button size="lg" className="w-full">
+              Go to Admin Panel
+            </Button>
+          </Link>
         </div>
       </div>
     );

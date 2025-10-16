@@ -6,9 +6,17 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Heart } from 'lucide-react';
+import { ShoppingCart, Heart, ShieldAlert } from 'lucide-react';
 import { Product } from '@/types';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface ProductCardProps {
   product: Product;
@@ -22,10 +30,18 @@ export function ProductCard({
   variant = 'grid',
 }: ProductCardProps) {
   const { addItem } = useCart();
+  const { user } = useAuth();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Prevent admins from adding to cart
+    if (user?.role === 'admin') {
+      toast.error('Admin accounts cannot purchase items');
+      return;
+    }
+
     if (onAddToCart) {
       onAddToCart(product);
     } else {
@@ -65,14 +81,37 @@ export function ProductCard({
                   <span className="text-xl font-bold text-primary">
                     {formatPrice(product.price)}
                   </span>
-                  <Button
-                    size="sm"
-                    onClick={handleAddToCart}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Add to Cart
-                  </Button>
+                  {user?.role === 'admin' ? (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span>
+                            <Button
+                              size="sm"
+                              onClick={handleAddToCart}
+                              disabled
+                              className="opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <ShieldAlert className="h-4 w-4 mr-2" />
+                              Admin
+                            </Button>
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Admin accounts cannot purchase items</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ) : (
+                    <Button
+                      size="sm"
+                      onClick={handleAddToCart}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Add to Cart
+                    </Button>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -118,14 +157,37 @@ export function ProductCard({
             <span className="text-xl font-bold text-primary">
               {formatPrice(product.price)}
             </span>
-            <Button
-              size="sm"
-              onClick={handleAddToCart}
-              className="opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              Add to Cart
-            </Button>
+            {user?.role === 'admin' ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        size="sm"
+                        onClick={handleAddToCart}
+                        disabled
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <ShieldAlert className="h-4 w-4 mr-2" />
+                        Admin
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Admin accounts cannot purchase items</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <Button
+                size="sm"
+                onClick={handleAddToCart}
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                Add to Cart
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>

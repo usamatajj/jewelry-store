@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -15,15 +16,47 @@ import {
   ArrowLeft,
   ShoppingBag,
   Heart,
+  ShieldAlert,
 } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function CartPage() {
   const { state, updateQuantity, removeItem, clearCart } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  // Redirect admins away from cart page
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      router.push('/admin');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const formatPrice = (price: number) => {
     return `Rs ${price.toLocaleString('en-PK')}`;
   };
+
+  // Block admin access
+  if (user?.role === 'admin') {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-md mx-auto text-center">
+          <ShieldAlert className="h-24 w-24 text-red-500 mx-auto mb-6" />
+          <h1 className="text-2xl font-bold mb-4">Access Restricted</h1>
+          <p className="text-gray-600 mb-8">
+            Admin accounts cannot make purchases. Please use a customer account.
+          </p>
+          <Link href="/admin">
+            <Button size="lg" className="w-full">
+              Go to Admin Panel
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (state.items.length === 0) {
     return (
