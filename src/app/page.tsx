@@ -20,7 +20,9 @@ export default function Home() {
                 <Truck className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Free Shipping</h3>
-              <p className="text-gray-600">Free shipping on orders over $100</p>
+              <p className="text-gray-600">
+                Free shipping on bank transfer orders above Rs 5,000
+              </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
