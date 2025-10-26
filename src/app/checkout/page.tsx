@@ -112,6 +112,7 @@ export default function CheckoutPage() {
     handleSubmit,
     watch,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<CheckoutForm>({
     resolver: zodResolver(checkoutSchema),
@@ -127,6 +128,15 @@ export default function CheckoutPage() {
 
   const paymentMethod = watch('paymentMethod');
   const useDifferentDelivery = watch('useDifferentDelivery');
+
+  // Clear payment screenshot and errors when switching payment methods
+  useEffect(() => {
+    if (paymentMethod === 'cash_on_delivery') {
+      setPaymentFile(null);
+      setValue('paymentScreenshot', undefined);
+      clearErrors('paymentScreenshot');
+    }
+  }, [paymentMethod, setValue, clearErrors]);
 
   const formatPrice = (price: number) => {
     return `Rs ${price.toLocaleString('en-PK')}`;
@@ -168,12 +178,7 @@ export default function CheckoutPage() {
             ? 0 // Bank transfer gets free shipping above Rs 5000
             : 200;
 
-      // COD charges: 4% tax + 0.5% handling + Rs 100 base
-      const codCharges =
-        data.paymentMethod === 'cash_on_delivery' ? subtotal * 0.045 + 100 : 0;
-
-      const tax = 0; // No tax for bank transfer
-      const total = subtotal + shipping + tax + codCharges;
+      const total = subtotal + shipping;
 
       let paymentScreenshotUrl = null;
 
@@ -369,11 +374,7 @@ export default function CheckoutPage() {
         ? 0 // Bank transfer gets free shipping above Rs 5000
         : 200;
 
-  // COD charges: 4% tax + 0.5% handling + Rs 100 base
-  const codCharges = paymentMethod === 'cash_on_delivery' ? subtotal * 0.045 + 100 : 0;
-
-  const tax = 0;
-  const total = subtotal + shipping + tax + codCharges;
+  const total = subtotal + shipping;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -625,23 +626,20 @@ export default function CheckoutPage() {
                 <CardTitle>Payment Method</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* COD Policy Information Banner */}
-                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                {/* Shipping Information Banner */}
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <div className="flex items-start space-x-2">
-                    <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-                    <div className="text-sm text-yellow-900">
-                      <p className="font-semibold mb-2">Cash on Delivery Policy:</p>
+                    <Truck className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-blue-900">
+                      <p className="font-semibold mb-2">Shipping Information:</p>
                       <div className="space-y-1.5">
                         <p>
-                          • Cash on delivery is subject to <strong>4% Tax</strong> (in
-                          accordance with budget 2025) +{' '}
-                          <strong>0.5% cash handling charges</strong> +{' '}
-                          <strong>Rs 100 base fee</strong>.
+                          • <strong>Bank Transfer:</strong> Free shipping on orders above
+                          Rs 5,000
                         </p>
                         <p>
-                          • To confirm your COD order, our team may request a small
-                          advance to ensure delivery and avoid return shipping fees. This
-                          amount will be adjusted in your total order value.
+                          • <strong>Cash on Delivery:</strong> Rs 200 shipping charges
+                          apply to all COD orders
                         </p>
                       </div>
                     </div>
@@ -650,31 +648,29 @@ export default function CheckoutPage() {
 
                 <RadioGroup
                   value={paymentMethod}
-                  onValueChange={(value: string) =>
+                  onValueChange={(value: string) => {
                     setValue(
                       'paymentMethod',
-                      value as 'bank_transfer' | 'cash_on_delivery'
-                    )
-                  }
+                      value as 'bank_transfer' | 'cash_on_delivery',
+                      { shouldValidate: false }
+                    );
+                  }}
                 >
                   {/* Bank Transfer Option */}
-                  <div
+                  <label
+                    htmlFor="bank_transfer"
                     className={`flex items-start space-x-3 border-2 rounded-lg p-4 cursor-pointer transition-colors ${
                       paymentMethod === 'bank_transfer'
                         ? 'border-primary bg-primary/5'
                         : 'border-gray-200'
                     }`}
-                    onClick={() => setValue('paymentMethod', 'bank_transfer')}
                   >
                     <RadioGroupItem value="bank_transfer" id="bank_transfer" />
                     <div className="flex-1">
-                      <Label
-                        htmlFor="bank_transfer"
-                        className="flex items-center cursor-pointer"
-                      >
+                      <div className="flex items-center">
                         <Building2 className="h-5 w-5 mr-2" />
                         <span className="font-semibold">Bank Transfer</span>
-                      </Label>
+                      </div>
                       <p className="text-sm text-gray-600 mt-1">
                         Transfer to our bank account and upload screenshot
                       </p>
@@ -699,7 +695,7 @@ export default function CheckoutPage() {
                             </p>
                           </div>
 
-                          <div className="mt-4">
+                          <div className="mt-4" onClick={(e) => e.stopPropagation()}>
                             <Label htmlFor="paymentScreenshot" className="block mb-2">
                               Upload Payment Screenshot *
                             </Label>
@@ -736,31 +732,25 @@ export default function CheckoutPage() {
                         </div>
                       )}
                     </div>
-                  </div>
+                  </label>
 
                   {/* Cash on Delivery Option */}
-                  <div
+                  <label
+                    htmlFor="cash_on_delivery"
                     className={`flex items-start space-x-3 border-2 rounded-lg p-4 cursor-pointer transition-colors ${
                       paymentMethod === 'cash_on_delivery'
                         ? 'border-primary bg-primary/5'
                         : 'border-gray-200'
                     }`}
-                    onClick={() => setValue('paymentMethod', 'cash_on_delivery')}
                   >
                     <RadioGroupItem value="cash_on_delivery" id="cash_on_delivery" />
                     <div className="flex-1">
-                      <Label
-                        htmlFor="cash_on_delivery"
-                        className="flex items-center cursor-pointer"
-                      >
+                      <div className="flex items-center">
                         <Wallet className="h-5 w-5 mr-2" />
                         <span className="font-semibold">Cash on Delivery</span>
-                        <Badge variant="secondary" className="ml-2">
-                          + 4.5%
-                        </Badge>
-                      </Label>
+                      </div>
                       <p className="text-sm text-gray-600 mt-1">
-                        Pay with cash when your order is delivered
+                        Pay with cash when your order is delivered (Rs 200 shipping)
                       </p>
 
                       {paymentMethod === 'cash_on_delivery' && (
@@ -768,15 +758,14 @@ export default function CheckoutPage() {
                           <div className="text-sm text-green-800">
                             <p className="font-semibold mb-1">✓ COD Available</p>
                             <p>
-                              You can pay with cash when your order arrives. Additional
-                              charges of {formatPrice(subtotal * 0.045 + 100)} will be
-                              added to your total.
+                              You can pay with cash when your order arrives. Rs 200
+                              shipping charges will be added to your total.
                             </p>
                           </div>
                         </div>
                       )}
                     </div>
-                  </div>
+                  </label>
                 </RadioGroup>
               </CardContent>
             </Card>
@@ -832,17 +821,6 @@ export default function CheckoutPage() {
                       )}
                     </span>
                   </div>
-                  {codCharges > 0 && (
-                    <div className="flex justify-between text-yellow-700">
-                      <span>
-                        COD Charges
-                        <span className="text-xs block text-gray-500">
-                          (4% tax + 0.5% handling + Rs 100)
-                        </span>
-                      </span>
-                      <span>{formatPrice(codCharges)}</span>
-                    </div>
-                  )}
                   <Separator />
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total</span>

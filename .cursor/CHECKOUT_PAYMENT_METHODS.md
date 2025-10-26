@@ -15,32 +15,27 @@ The checkout system has been updated to support Pakistani payment methods with p
 
 ### 2. Cash on Delivery (COD)
 
-#### COD Charges Breakdown:
-- **4% Tax** (in accordance with Budget 2025)
-- **0.5% Cash Handling Charges**
-- **Rs 100 Base Fee**
+#### COD Charges:
 - **Rs 200 Shipping** (always, no free shipping for COD)
 
 #### Formula:
 ```
-Total COD Charges = (Subtotal × 4.5%) + Rs 100
 Shipping = Rs 200 (always for COD)
+Total = Subtotal + Rs 200
 ```
 
 #### Example:
 For an Rs 8,000 order:
-- COD Charges: (8000 × 0.045) + 100 = Rs 460
+- Subtotal: Rs 8,000
 - Shipping: Rs 200
-- Total Additional: Rs 660
-- Order Total: Rs 8,660
+- Order Total: Rs 8,200
 
 #### Key Points:
 - Payment status: `pending` until delivery
 - No screenshot required
 - No maximum order limit
 - COD available for all order amounts
-- Terms and conditions displayed at checkout
-- Team may request small advance to ensure delivery
+- Rs 200 flat shipping fee for all COD orders
 
 ## 🗄️ Database Schema
 
@@ -154,16 +149,8 @@ shipping = paymentMethod === 'cash_on_delivery'
     ? 0   // Bank transfer gets free shipping above Rs 5000
     : 200;
 
-// COD charges: 4% tax + 0.5% handling + Rs 100 base
-codCharges = paymentMethod === 'cash_on_delivery' 
-  ? subtotal * 0.045 + 100 
-  : 0;
-
-// Tax (currently 0 for bank transfer)
-tax = 0;
-
 // Calculate total
-total = subtotal + shipping + tax + codCharges;
+total = subtotal + shipping;
 ```
 
 ## 📦 Shipping Policy
@@ -174,7 +161,6 @@ total = subtotal + shipping + tax + codCharges;
 
 ### Cash on Delivery (COD):
 - 💰 **Always Rs 200 shipping** (no free shipping for COD)
-- This is in addition to COD charges (4.5% + Rs 100)
 
 ### Rationale:
 COD orders involve additional operational costs:
@@ -192,55 +178,49 @@ Therefore, free shipping is only available for bank transfer orders above Rs 5,0
 **Bank Transfer:**
 - Subtotal: Rs 3,000
 - Shipping: Rs 200
-- COD Charges: Rs 0
 - **Total: Rs 3,200**
 
 **Cash on Delivery:**
 - Subtotal: Rs 3,000
 - Shipping: Rs 200
-- COD Charges: Rs 235 (3000 × 0.045 + 100)
-- **Total: Rs 3,435**
+- **Total: Rs 3,200**
 
 ### Example 2: Medium Order (Rs 8,000)
 
 **Bank Transfer:**
 - Subtotal: Rs 8,000
 - Shipping: Rs 0 (free above Rs 5,000)
-- COD Charges: Rs 0
 - **Total: Rs 8,000**
 
 **Cash on Delivery:**
 - Subtotal: Rs 8,000
 - Shipping: Rs 200 (COD always pays)
-- COD Charges: Rs 460 (8000 × 0.045 + 100)
-- **Total: Rs 8,660**
-- **Difference: Rs 660 more than bank transfer**
+- **Total: Rs 8,200**
+- **Difference: Rs 200 more than bank transfer**
 
 ### Example 3: Large Order (Rs 15,000)
 
 **Bank Transfer:**
 - Subtotal: Rs 15,000
 - Shipping: Rs 0 (free above Rs 5,000)
-- COD Charges: Rs 0
 - **Total: Rs 15,000**
 
 **Cash on Delivery:**
 - Subtotal: Rs 15,000
 - Shipping: Rs 200 (COD always pays)
-- COD Charges: Rs 775 (15000 × 0.045 + 100)
-- **Total: Rs 15,975**
-- **Difference: Rs 975 more than bank transfer**
+- **Total: Rs 15,200**
+- **Difference: Rs 200 more than bank transfer**
 
 ### Summary Table:
 
 | Order Amount | Bank Transfer | COD Total | Additional COD Cost |
 |--------------|---------------|-----------|---------------------|
-| Rs 3,000 | Rs 3,200 | Rs 3,435 | +Rs 235 |
-| Rs 5,000 | Rs 5,200 | Rs 5,525 | +Rs 325 |
-| Rs 8,000 | Rs 8,000 | Rs 8,660 | +Rs 660 |
-| Rs 10,000 | Rs 10,000 | Rs 10,750 | +Rs 750 |
-| Rs 15,000 | Rs 15,000 | Rs 15,975 | +Rs 975 |
-| Rs 50,000 | Rs 50,000 | Rs 52,550 | +Rs 2,550 |
+| Rs 3,000 | Rs 3,200 | Rs 3,200 | +Rs 0 |
+| Rs 5,000 | Rs 5,000 | Rs 5,200 | +Rs 200 |
+| Rs 8,000 | Rs 8,000 | Rs 8,200 | +Rs 200 |
+| Rs 10,000 | Rs 10,000 | Rs 10,200 | +Rs 200 |
+| Rs 15,000 | Rs 15,000 | Rs 15,200 | +Rs 200 |
+| Rs 50,000 | Rs 50,000 | Rs 50,200 | +Rs 200 |
 
 ## 📧 Email Confirmation
 

@@ -125,11 +125,7 @@ export async function POST(request: NextRequest) {
           ? 0 // Bank transfer gets free shipping above Rs 5000
           : 200;
 
-    // COD charges: 4% tax + 0.5% handling + Rs 100 base fee
-    const codCharges = payment_method === 'cash_on_delivery' ? subtotal * 0.045 + 100 : 0;
-
-    const tax = 0; // No tax for bank transfer
-    const total = subtotal + shipping + tax + codCharges;
+    const total = subtotal + shipping;
 
     // Prepare shipping address
     const shippingAddress = delivery_address
@@ -165,7 +161,6 @@ export async function POST(request: NextRequest) {
       ),
       subtotal: `${subtotal.toLocaleString('en-PK')}`,
       shipping: `${shipping.toLocaleString('en-PK')}`,
-      codCharges: codCharges > 0 ? `${codCharges.toLocaleString('en-PK')}` : undefined,
       total: `${total.toLocaleString('en-PK')}`,
       shippingAddress,
       isBankTransfer: payment_method === 'bank_transfer',
